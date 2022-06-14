@@ -67,33 +67,15 @@ FUNCTION Wiki$ (PageName$)
         PCOPY 3, 0
     END IF
 
-    url$ = CHR$(34) + wikiBaseAddress$ + "/index.php?title=" + PageName2$ + "&action=edit" + CHR$(34)
+    url$ = CHR$(34) + wikiBaseAddress$ + "/" + PageName2$ + ".md" + CHR$(34)
     outputFile$ = Cache_Folder$ + "/" + PageName2$ + ".txt"
 
-    'wiki text delimiters:
-    s1$ = "name=" + CHR$(34) + "wpTextbox1" + CHR$(34) + ">"
-    s2$ = "</textarea>"
-
-    SHELL _HIDE "curl -o " + CHR$(34) + outputFile$ + CHR$(34) + " " + url$
+    SHELL _HIDE "curl -L -o " + CHR$(34) + outputFile$ + CHR$(34) + " " + url$
     fh = FREEFILE
     OPEN outputFile$ FOR BINARY AS #fh 'get new content
     a$ = SPACE$(LOF(fh))
     GET #fh, 1, a$
     CLOSE #fh
-
-    s1 = INSTR(a$, s1$)
-    IF s1 > 0 THEN
-        'clean up downloaded contents
-        a$ = MID$(a$, s1 + LEN(s1$))
-        s2 = INSTR(a$, s2$)
-        IF s2 > 0 THEN
-            a$ = LEFT$(a$, s2)
-        END IF
-
-        OPEN outputFile$ FOR OUTPUT AS #fh 'clear old content
-        PRINT #fh, a$ 'save clean content
-        CLOSE #fh
-    END IF
 
     Wiki$ = a$
     EXIT FUNCTION
@@ -219,7 +201,6 @@ FUNCTION Help_Col 'helps to calculate the default color
     IF Help_Bold THEN col = Help_Col_Bold 'Note: Bold overrides italic
     Help_Col = col
 END FUNCTION
-
 
 
 SUB WikiParse (a$)
