@@ -5276,12 +5276,12 @@ FUNCTION ide2 (ignore)
             END IF
             IF menu$(m, s) = "Keyword #Index" THEN
                 PCOPY 3, 0: SCREEN , , 3, 0
-                lnk$ = "Keyword Reference - Alphabetical"
+                lnk$ = "Keyword Reference (Alphabetical)"
                 GOTO OpenHelpLnk
             END IF
             IF menu$(m, s) = "#Keywords by Usage" THEN
                 PCOPY 3, 0: SCREEN , , 3, 0
-                lnk$ = "Keyword Reference - By usage"
+                lnk$ = "Keyword Reference (Usage)"
                 GOTO OpenHelpLnk
             END IF
 
@@ -18791,7 +18791,7 @@ SUB ideupdatehelpbox
                 IF LEN(f$) = 2 THEN f$ = CHR$(0)
 
                 'Prepend core pages to list
-                f$ = CHR$(0) + "Keyword_Reference_-_By_usage.txt" + f$
+                f$ = CHR$(0) + "Keyword-Reference---(Usage).txt" + f$
                 f$ = CHR$(0) + "QB64_Help_Menu.txt" + f$
                 f$ = CHR$(0) + "QB64_FAQ.txt" + f$
                 UpdateStep = UpdateStep + 1
@@ -18801,7 +18801,7 @@ SUB ideupdatehelpbox
                 'Download and PARSE alphabetical index to build required F1 help links
                 FullMessage$(1) = "Regenerating keyword list..."
                 Help_Recaching = 1: Help_IgnoreCache = 1
-                a$ = Wiki$("Keyword Reference - Alphabetical")
+                a$ = Wiki$("Keyword Reference (Alphabetical)")
                 Help_Recaching = 0: Help_IgnoreCache = 0
                 WikiParse a$
                 UpdateStep = UpdateStep + 1

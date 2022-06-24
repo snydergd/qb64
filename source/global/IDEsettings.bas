@@ -220,10 +220,14 @@ Include_GDB_Debugging_Info = idedebuginfo
 
 wikiBaseAddress$ = "https://github.com/QB64Official/qb64/wiki"
 IF ReadConfigSetting(generalSettingsSection$, "WikiBaseAddress", value$) THEN
+  IF value$ = "https://wiki.qb64.org" THEN
+    WriteConfigSetting generalSettingsSection$, "WikiBaseAddress", wikiBaseAddress$
+  ELSE
     wikiBaseAddress$ = value$
-ELSE WriteConfigSetting generalSettingsSection$, "WikiBaseAddress", wikiBaseAddress$
+  END IF
+ELSE 
+  WriteConfigSetting generalSettingsSection$, "WikiBaseAddress", wikiBaseAddress$
 END IF
-
 
 'Mouse settings ---------------------------------------------------------------
 result = ReadConfigSetting(mouseSettingsSection$, "SwapMouseButton", value$)
