@@ -1,11 +1,11 @@
 //----------------------------------------------------------------------------------------------------
-//    ___  ___   __ _ _  ___ ___   ___                       _    _ _
-//   / _ \| _ ) / /| | || _ \ __| |_ _|_ __  __ _ __ _ ___  | |  (_) |__ _ _ __ _ _ _ _  _
-//  | (_) | _ \/ _ \_  _|  _/ _|   | || '  \/ _` / _` / -_) | |__| | '_ \ '_/ _` | '_| || |
-//   \__\_\___/\___/ |_||_| |___| |___|_|_|_\__,_\__, \___| |____|_|_.__/_| \__,_|_|  \_, |
-//                                               |___/                                |__/
+//    ___  ___   __ _ _    ___                       _    _ _
+//   / _ \| _ ) / /| | |  |_ _|_ __  __ _ __ _ ___  | |  (_) |__ _ _ __ _ _ _ _  _
+//  | (_) | _ \/ _ \_  _|  | || '  \/ _` / _` / -_) | |__| | '_ \ '_/ _` | '_| || |
+//   \__\_\___/\___/ |_|  |___|_|_|_\__,_\__, \___| |____|_|_.__/_| \__,_|_|  \_, |
+//                                       |___/                                |__/
 //
-//  QB64-PE Image Library
+//  QB64 Image Library
 //  Powered by stb_image (https://github.com/nothings/stb) & dr_pcx (https://github.com/mackron/dr_pcx)
 //
 //  Copyright (c) 2022 Samuel Gomes
@@ -18,21 +18,21 @@
 int32_t func__loadimage(qbs *f, int32_t bpp, int32_t passed);
 
 #else
-#    define DR_PCX_IMPLEMENTATION
-#    include "dr_pcx.h"
-#    define STB_IMAGE_IMPLEMENTATION
-#    include "stb_image.h"
+#define DR_PCX_IMPLEMENTATION
+#include "dr_pcx.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 // The byte ordering here are straight from libqb.cpp. So, if libqb.cpp is wrong, then we are wrong! ;)
-#    define IMAGE_GET_BGRA_RED(c) (uint32_t(c) >> 16 & 0xFF)
-#    define IMAGE_GET_BGRA_GREEN(c) (uint32_t(c) >> 8 & 0xFF)
-#    define IMAGE_GET_BGRA_BLUE(c) (uint32_t(c) & 0xFF)
-#    define IMAGE_GET_BGRA_ALPHA(c) (uint32_t(c) >> 24)
-#    define IMAGE_MAKE_BGRA(r, g, b, a) (uint32_t((uint8_t(b) | (uint16_t(uint8_t(g)) << 8)) | (uint32_t(uint8_t(r)) << 16) | (uint32_t(uint8_t(a)) << 24)))
+#define IMAGE_GET_BGRA_RED(c) (uint32_t(c) >> 16 & 0xFF)
+#define IMAGE_GET_BGRA_GREEN(c) (uint32_t(c) >> 8 & 0xFF)
+#define IMAGE_GET_BGRA_BLUE(c) (uint32_t(c) & 0xFF)
+#define IMAGE_GET_BGRA_ALPHA(c) (uint32_t(c) >> 24)
+#define IMAGE_MAKE_BGRA(r, g, b, a) (uint32_t((uint8_t(b) | (uint16_t(uint8_t(g)) << 8)) | (uint32_t(uint8_t(r)) << 16) | (uint32_t(uint8_t(a)) << 24)))
 // Calculates the RGB distance in the RGB color cube
-#    define IMAGE_CALCULATE_RGB_DISTANCE(r1, g1, b1, r2, g2, b2)                                                                                               \
-        sqrt(((float(r2) - float(r1)) * (float(r2) - float(r1))) + ((float(g2) - float(g1)) * (float(g2) - float(g1))) +                                       \
-             ((float(b2) - float(b1)) * (float(b2) - float(b1))))
+#define IMAGE_CALCULATE_RGB_DISTANCE(r1, g1, b1, r2, g2, b2)                                                         \
+    sqrt(((float(r2) - float(r1)) * (float(r2) - float(r1))) + ((float(g2) - float(g1)) * (float(g2) - float(g1))) + \
+         ((float(b2) - float(b1)) * (float(b2) - float(b1))))
 
 /// <summary>
 /// Decodes a PCX image using the dr_pcx library.
@@ -43,7 +43,8 @@ int32_t func__loadimage(qbs *f, int32_t bpp, int32_t passed);
 /// <param name="x">Out: width in pixels. This cannot be NULL</param>
 /// <param name="y">Out: height in pixels. This cannot be NULL</param>
 /// <returns>A pointer to the raw pixel data in RGBA format or NULL on failure</returns>
-static uint8_t *image_decode_drpcx(uint8_t *content, int32_t bytes, int32_t *result, int32_t *x, int32_t *y) {
+static uint8_t *image_decode_drpcx(uint8_t *content, int32_t bytes, int32_t *result, int32_t *x, int32_t *y)
+{
     auto h = 0, w = 0, comp = 0;
     *result = 0;
 
@@ -66,7 +67,8 @@ static uint8_t *image_decode_drpcx(uint8_t *content, int32_t bytes, int32_t *res
 /// <param name="x">Out: width in pixels. This cannot be NULL</param>
 /// <param name="y">Out: height in pixels. This cannot be NULL</param>
 /// <returns>A pointer to the raw pixel data in RGBA format or NULL on failure</returns>
-static uint8_t *image_decode_stbi(uint8_t *content, int32_t bytes, int32_t *result, int32_t *x, int32_t *y) {
+static uint8_t *image_decode_stbi(uint8_t *content, int32_t bytes, int32_t *result, int32_t *x, int32_t *y)
+{
     auto h = 0, w = 0, comp = 0;
     *result = 0;
 
@@ -85,7 +87,8 @@ static uint8_t *image_decode_stbi(uint8_t *content, int32_t bytes, int32_t *resu
 /// </summary>
 /// <param name="n">The color component</param>
 /// <returns>The clamped value</returns>
-static inline uint8_t image_clamp_component(int32_t n) {
+static inline uint8_t image_clamp_component(int32_t n)
+{
     n &= -(n >= 0);
     return n | ((255 - n) >> 31);
 }
@@ -98,8 +101,10 @@ static inline uint8_t image_clamp_component(int32_t n) {
 /// <param name="h">The height of the image in pixels</param>
 /// <param name="paletteOut">A 256 color palette if the operation was successful. This cannot be NULL</param>
 /// <returns>A pointer to a 8bpp raw image or NULL if operation failed</returns>
-static uint8_t *image_convert_8bpp(uint8_t *src, int32_t w, int32_t h, uint32_t *paletteOut) {
-    static struct {
+static uint8_t *image_convert_8bpp(uint8_t *src, int32_t w, int32_t h, uint32_t *paletteOut)
+{
+    static struct
+    {
         uint32_t r, g, b;
         uint32_t count;
     } cubes[256];
@@ -109,7 +114,8 @@ static uint8_t *image_convert_8bpp(uint8_t *src, int32_t w, int32_t h, uint32_t 
 
     // Allocate memory for new image (8-bit indexed)
     auto pixels = (uint8_t *)malloc(w * h);
-    if (!pixels) {
+    if (!pixels)
+    {
         return nullptr;
     }
 
@@ -117,8 +123,10 @@ static uint8_t *image_convert_8bpp(uint8_t *src, int32_t w, int32_t h, uint32_t 
 
     // Quantization phase
     auto dst = pixels;
-    for (auto y = 0; y < h; y++) {
-        for (auto x = 0; x < w; x++) {
+    for (auto y = 0; y < h; y++)
+    {
+        for (auto x = 0; x < w; x++)
+        {
             int32_t t = bayerMatrix[((y & 3) << 2) + (x & 3)];
             int32_t b = image_clamp_component((*src++) + (t << 1));
             int32_t g = image_clamp_component((*src++) + (t << 1));
@@ -138,10 +146,14 @@ static uint8_t *image_convert_8bpp(uint8_t *src, int32_t w, int32_t h, uint32_t 
     }
 
     // Generate a uniform CLUT based on the quantized colors
-    for (auto i = 0; i < 256; i++) {
-        if (cubes[i].count) {
+    for (auto i = 0; i < 256; i++)
+    {
+        if (cubes[i].count)
+        {
             paletteOut[i] = IMAGE_MAKE_BGRA(cubes[i].r / cubes[i].count, cubes[i].g / cubes[i].count, cubes[i].b / cubes[i].count, 0xFF);
-        } else {
+        }
+        else
+        {
             paletteOut[i] = IMAGE_MAKE_BGRA(0, 0, 0, 0xFF);
         }
     }
@@ -157,19 +169,23 @@ static uint8_t *image_convert_8bpp(uint8_t *src, int32_t w, int32_t h, uint32_t 
 /// <param name="h">The height of the image in pixels</param>
 /// <param name="src_pal">The image's original palette. This cannot be NULL</param>
 /// <param name="dst_pal">The destination palette. This cannot be NULL</param>
-static void image_remap_palette(uint8_t *src, int32_t w, int32_t h, uint32_t *src_pal, uint32_t *dst_pal) {
+static void image_remap_palette(uint8_t *src, int32_t w, int32_t h, uint32_t *src_pal, uint32_t *dst_pal)
+{
     static uint32_t palMap[256];
 
     memset(palMap, NULL, sizeof(palMap));
 
     // Match the palette
-    for (auto x = 0; x < 256; x++) {
+    for (auto x = 0; x < 256; x++)
+    {
         auto oldDist = IMAGE_CALCULATE_RGB_DISTANCE(0, 0, 0, 255, 255, 255); // The farthest we can go in the color cube
-        for (auto y = 0; y < 256; y++) {
+        for (auto y = 0; y < 256; y++)
+        {
             auto newDist = IMAGE_CALCULATE_RGB_DISTANCE(IMAGE_GET_BGRA_RED(src_pal[x]), IMAGE_GET_BGRA_GREEN(src_pal[x]), IMAGE_GET_BGRA_BLUE(src_pal[x]),
                                                         IMAGE_GET_BGRA_RED(dst_pal[y]), IMAGE_GET_BGRA_GREEN(dst_pal[y]), IMAGE_GET_BGRA_BLUE(dst_pal[y]));
 
-            if (oldDist > newDist) {
+            if (oldDist > newDist)
+            {
                 oldDist = newDist;
                 palMap[x] = y;
             }
@@ -177,7 +193,8 @@ static void image_remap_palette(uint8_t *src, int32_t w, int32_t h, uint32_t *sr
     }
 
     // Update the bitmap to use the matched palette
-    for (auto c = 0; c < (w * h); c++) {
+    for (auto c = 0; c < (w * h); c++)
+    {
         src[c] = palMap[src[c]];
     }
 }
@@ -189,7 +206,8 @@ static void image_remap_palette(uint8_t *src, int32_t w, int32_t h, uint32_t *sr
 /// <param name="bpp">Mode: 32=32bpp, 33=hardware acclerated 32bpp, 256=8bpp or 257=8bpp without palette remap</param>
 /// <param name="passed">How many parameters were passed?</param>
 /// <returns>Valid LONG image handle values that are less than -1 or -1 on failure</returns>
-int32_t func__loadimage(qbs *f, int32_t bpp, int32_t passed) {
+int32_t func__loadimage(qbs *f, int32_t bpp, int32_t passed)
+{
     if (new_error)
         return 0;
 
@@ -197,22 +215,30 @@ int32_t func__loadimage(qbs *f, int32_t bpp, int32_t passed) {
     auto dontRemapPalette = false;
 
     // Handle special cases
-    if (bpp == 33) {
+    if (bpp == 33)
+    {
         bpp = 32;
         isHardware = true;
-    } else if (bpp == 257) {
+    }
+    else if (bpp == 257)
+    {
         bpp = 256;
         dontRemapPalette = true;
     }
 
     // Validate bpp
-    if (passed) {
-        if ((bpp != 32) && (bpp != 256)) {
+    if (passed)
+    {
+        if ((bpp != 32) && (bpp != 256))
+        {
             error(5);
             return 0;
         }
-    } else {
-        if (write_page->text) {
+    }
+    else
+    {
+        if (write_page->text)
+        {
             error(5);
             return 0;
         }
@@ -227,13 +253,15 @@ int32_t func__loadimage(qbs *f, int32_t bpp, int32_t passed) {
         return -1;
     auto lof = gfs_lof(fh);
     auto content = (uint8 *)malloc(lof);
-    if (!content) {
+    if (!content)
+    {
         gfs_close(fh);
         return -1;
     }
     auto result = gfs_read(fh, -1, content, lof);
     gfs_close(fh);
-    if (result < 0) {
+    if (result < 0)
+    {
         free(content);
         return -1;
     }
@@ -242,7 +270,8 @@ int32_t func__loadimage(qbs *f, int32_t bpp, int32_t passed) {
     // Try to load the image using dr_pcx
     auto pixels = image_decode_drpcx(content, lof, &result, &x, &y);
     // If that failed try loading via stb_image
-    if (!(result & 1)) {
+    if (!(result & 1))
+    {
         pixels = image_decode_stbi(content, lof, &result, &x, &y);
     }
 
@@ -255,8 +284,10 @@ int32_t func__loadimage(qbs *f, int32_t bpp, int32_t passed) {
 
     // Convert RGBA to BGRA
     auto cp = pixels;
-    for (auto y2 = 0; y2 < y; y2++) {
-        for (auto x2 = 0; x2 < x; x2++) {
+    for (auto y2 = 0; y2 < y; y2++)
+    {
+        for (auto x2 = 0; x2 < x; x2++)
+        {
             auto r = cp[0];
             auto b = cp[2];
             cp[0] = b;
@@ -268,27 +299,32 @@ int32_t func__loadimage(qbs *f, int32_t bpp, int32_t passed) {
     int32_t i; // Image handle to be returned
 
     // Convert image to 8bpp if requested by the user
-    if (bpp == 256) {
+    if (bpp == 256)
+    {
         i = func__newimage(x, y, 256, 1);
-        if (i == -1) {
+        if (i == -1)
+        {
             free(pixels);
             return -1;
         }
 
         auto palette = (uint32_t *)malloc(256 * sizeof(uint32_t)); // 3 bytes for bgr + 1 for alpha (basically a uint32_t)
-        if (!palette) {
+        if (!palette)
+        {
             free(pixels);
             return -1;
         }
 
         auto pixels256 = image_convert_8bpp(pixels, x, y, palette);
-        if (!pixels256) {
+        if (!pixels256)
+        {
             free(palette);
             free(pixels);
             return -1;
         }
 
-        if (dontRemapPalette) {
+        if (dontRemapPalette)
+        {
             // Copy the 8bpp pixel data and then free it
             memcpy(img[-i].offset, pixels256, x * y);
             free(pixels256);
@@ -296,7 +332,9 @@ int32_t func__loadimage(qbs *f, int32_t bpp, int32_t passed) {
             // Copy the palette and then free it
             memcpy(img[-i].pal, palette, 256 * sizeof(uint32_t));
             free(palette);
-        } else {
+        }
+        else
+        {
             // Remap the image indexes to QB64 default palette and then free our palette
             image_remap_palette(pixels256, x, y, palette, palette_256);
             free(palette);
@@ -308,9 +346,12 @@ int32_t func__loadimage(qbs *f, int32_t bpp, int32_t passed) {
             // Copy the default QB64 palette
             memcpy(img[-i].pal, palette_256, 256 * sizeof(uint32_t));
         }
-    } else {
+    }
+    else
+    {
         i = func__newimage(x, y, 32, 1);
-        if (i == -1) {
+        if (i == -1)
+        {
             free(pixels);
             return -1;
         }
@@ -321,7 +362,8 @@ int32_t func__loadimage(qbs *f, int32_t bpp, int32_t passed) {
     free(pixels);
 
     // This only executes if bpp is 32
-    if (isHardware) {
+    if (isHardware)
+    {
         auto iHardware = func__copyimage(i, 33, 1);
         sub__freeimage(i, 1);
         i = iHardware;

@@ -1,33 +1,38 @@
 #!/bin/sh
-gcc -s -c -w -Wall ../../src/helpers.c -D AL_LIBTYPE_STATIC -o temp/helpers.o
-gcc -s -c -w -Wall ../../src/bs2b.c -D AL_LIBTYPE_STATIC -o temp/bs2b.o
-gcc -s -c -w -Wall ../../src/alAuxEffectSlot.c -D AL_LIBTYPE_STATIC -o temp/alAuxEffectSlot.o
-gcc -s -c -w -Wall ../../src/alBuffer.c -D AL_LIBTYPE_STATIC -o temp/alBuffer.o
-gcc -s -c -w -Wall ../../src/ALc.c -D AL_LIBTYPE_STATIC -o temp/ALc.o
-gcc -s -c -w -Wall ../../src/alcConfig.c -D AL_LIBTYPE_STATIC -o temp/alcConfig.o
-gcc -s -c -w -Wall ../../src/alcDedicated.c -D AL_LIBTYPE_STATIC -o temp/alcDedicated.o
-gcc -s -c -w -Wall ../../src/alcEcho.c -D AL_LIBTYPE_STATIC -o temp/alcEcho.o
-gcc -s -c -w -Wall ../../src/alcModulator.c -D AL_LIBTYPE_STATIC -o temp/alcModulator.o
-gcc -s -c -w -Wall ../../src/alcReverb.c -D AL_LIBTYPE_STATIC -o temp/alcReverb.o
-gcc -s -c -w -Wall ../../src/alcRing.c -D AL_LIBTYPE_STATIC -o temp/alcRing.o
-gcc -s -c -w -Wall ../../src/alcThread.c -D AL_LIBTYPE_STATIC -o temp/alcThread.o
-gcc -s -c -w -Wall ../../src/alEffect.c -D AL_LIBTYPE_STATIC -o temp/alEffect.o
-gcc -s -c -w -Wall ../../src/alError.c -D AL_LIBTYPE_STATIC -o temp/alError.o
-gcc -s -c -w -Wall ../../src/alExtension.c -D AL_LIBTYPE_STATIC -o temp/alExtension.o
-gcc -s -c -w -Wall ../../src/alFilter.c -D AL_LIBTYPE_STATIC -o temp/alFilter.o
-gcc -s -c -w -Wall ../../src/alListener.c -D AL_LIBTYPE_STATIC -o temp/alListener.o
-gcc -s -c -w -Wall ../../src/alsa.c -D AL_LIBTYPE_STATIC -o temp/alsa.o
-gcc -s -c -w -Wall ../../src/alSource.c -D AL_LIBTYPE_STATIC -o temp/alSource.o
-gcc -s -c -w -Wall ../../src/alState.c -D AL_LIBTYPE_STATIC -o temp/alState.o
-gcc -s -c -w -Wall ../../src/alThunk.c -D AL_LIBTYPE_STATIC -o temp/alThunk.o
-gcc -s -c -w -Wall ../../src/ALu.c -D AL_LIBTYPE_STATIC -o temp/ALu.o
-gcc -s -c -w -Wall ../../src/hrtf.c -D AL_LIBTYPE_STATIC -o temp/hrtf.o
-gcc -s -c -w -Wall ../../src/loopback.c -D AL_LIBTYPE_STATIC -o temp/loopback.o
-gcc -s -c -w -Wall ../../src/mixer.c -D AL_LIBTYPE_STATIC -o temp/mixer.o
-gcc -s -c -w -Wall ../../src/null.c -D AL_LIBTYPE_STATIC -o temp/null.o
-gcc -s -c -w -Wall ../../src/panning.c -D AL_LIBTYPE_STATIC -o temp/panning.o
-gcc -s -c -w -Wall ../../src/wave.c -D AL_LIBTYPE_STATIC -o temp/wave.o
-ar rcs src.a temp/alAuxEffectSlot.o temp/alBuffer.o temp/ALc.o temp/alcConfig.o temp/alcDedicated.o temp/alcEcho.o temp/alcModulator.o temp/alcReverb.o temp/alcRing.o temp/alcThread.o temp/alEffect.o temp/alError.o temp/alExtension.o temp/alFilter.o temp/alListener.o temp/alsa.o temp/alSource.o temp/alState.o temp/alThunk.o temp/ALu.o temp/hrtf.o temp/loopback.o temp/mixer.o temp/null.o temp/panning.o temp/wave.o temp/helpers.o temp/bs2b.o
+
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/common.c -o temp/common.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/control.c -o temp/control.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/dataio.c -o temp/dataio.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/effects.c -o temp/effects.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/filter.c -o temp/filter.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/format.c -o temp/format.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/hio.c -o temp/hio.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/it_load.c -o temp/it_load.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/itsex.c -o temp/itsex.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/lfo.c -o temp/lfo.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/load.c -o temp/load.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/load_helpers.c -o temp/load_helpers.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/md5.c -o temp/md5.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/memio.c -o temp/memio.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/misc.c -o temp/misc.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/mix_all.c -o temp/mix_all.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/mixer.c -o temp/mixer.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/mod_load.c -o temp/mod_load.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/period.c -o temp/period.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/player.c -o temp/player.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/read_event.c -o temp/read_event.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/s3m_load.c -o temp/s3m_load.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/sample.c -o temp/sample.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/scan.c -o temp/scan.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/smix.c -o temp/smix.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/virtual.c -o temp/virtual.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/win32.c -o temp/win32.o
+gcc -s -c -w -Wall -O2 -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC ../../extras/libxmp-lite/xm_load.c -o temp/xm_load.o
+g++ -c -w -Wall -O2 ../../audio.cpp -o temp/audio.o
+g++ -c -w -Wall -O2 ../../miniaudio_impl.cpp -o temp/miniaudio_impl.o
+
+ar rcs src.a temp/common.o temp/control.o temp/dataio.o temp/effects.o temp/filter.o temp/format.o temp/hio.o temp/it_load.o temp/itsex.o temp/lfo.o temp/load.o temp/load_helpers.o temp/md5.o temp/memio.o temp/misc.o temp/mix_all.o temp/mixer.o temp/mod_load.o temp/period.o temp/player.o temp/read_event.o temp/s3m_load.o temp/sample.o temp/scan.o temp/smix.o temp/virtual.o temp/win32.o temp/xm_load.o temp/audio.o temp/miniaudio_impl.o
+
 echo "Press any key to continue..."
 Pause()
 {
@@ -41,22 +46,3 @@ echo "Finished! Cancel this shell script or close the terminal"
 Pause
 Pause
 Pause
-
-####Compiled but unrequired (using ALSA instead)####
-gcc -s -c -w -Wall ../../src/oss.c -D AL_LIBTYPE_STATIC -o temp/oss.o
-temp/oss.o
-gcc -s -c -w -Wall ../../src/pulseaudio.c -D AL_LIBTYPE_STATIC -o temp/pulseaudio.o
-temp/pulseaudio.o
-
-####These all failed to compile in Ubuntu####
-gcc -s -c -w -Wall ../../src/solaris.c -D AL_LIBTYPE_STATIC -o temp/solaris.o
-gcc -s -c -w -Wall ../../src/sndio.c -D AL_LIBTYPE_STATIC -o temp/sndio.o
-gcc -s -c -w -Wall ../../src/portaudio.c -D AL_LIBTYPE_STATIC -o temp/portaudio.o
-gcc -s -c -w -Wall ../../src/coreaudio.c -D AL_LIBTYPE_STATIC -o temp/coreaudio.o
-gcc -s -c -w -Wall ../../src/opensl.c -D AL_LIBTYPE_STATIC -o temp/opensl.o
-
-####These are Windows specific####
-gcc -s -c -w -Wall ../../src/dsound.c -D AL_LIBTYPE_STATIC -o temp/dsound.o
-gcc -s -c -w -Wall ../../src/mmdevapi.c -D AL_LIBTYPE_STATIC -o temp/mmdevapi.o
-gcc -s -c -w -Wall ../../src/winmm.c -D AL_LIBTYPE_STATIC -o temp/winmm.o
-
