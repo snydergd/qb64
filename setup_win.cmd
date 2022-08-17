@@ -103,3 +103,6 @@ qb64
 
 echo.
 pause
+
+:end
+endlocal
