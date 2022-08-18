@@ -26,8 +26,8 @@ clang -c -D LIBXMP_CORE_PLAYER -D LIBXMP_NO_PROWIZARD -D LIBXMP_NO_DEPACKERS -D 
 clang -c -D LIBXMP_CORE_PLAYER -D LIBXMP_NO_PROWIZARD -D LIBXMP_NO_DEPACKERS -D BUILDING_STATIC ../../extras/libxmp-lite/smix.c -o temp/smix.o
 clang -c -D LIBXMP_CORE_PLAYER -D LIBXMP_NO_PROWIZARD -D LIBXMP_NO_DEPACKERS -D BUILDING_STATIC ../../extras/libxmp-lite/virtual.c -o temp/virtual.o
 clang -c -D LIBXMP_CORE_PLAYER -D LIBXMP_NO_PROWIZARD -D LIBXMP_NO_DEPACKERS -D BUILDING_STATIC ../../extras/libxmp-lite/xm_load.c -o temp/xm_load.o
-clang++ -c ../../audio.cpp -o temp/audio.o
-clang++ -c ../../miniaudio_impl.cpp -o temp/miniaudio_impl.o
+clang++ -c -std=c++11 ../../audio.cpp -o temp/audio.o
+clang++ -c -std=c++11 ../../miniaudio_impl.cpp -o temp/miniaudio_impl.o
 
 ar rcs src.a temp/common.o temp/control.o temp/dataio.o temp/effects.o temp/filter.o temp/format.o temp/hio.o temp/it_load.o temp/itsex.o temp/lfo.o temp/load.o temp/load_helpers.o temp/md5.o temp/memio.o temp/misc.o temp/mix_all.o temp/mixer.o temp/mod_load.o temp/period.o temp/player.o temp/read_event.o temp/s3m_load.o temp/sample.o temp/scan.o temp/smix.o temp/virtual.o temp/xm_load.o temp/audio.o temp/miniaudio_impl.o
 
