@@ -1,9 +1,6 @@
 === IMPORTANT LICENSING NOTE FOR QB64 PROGRAMMERS ===
-All executables which perform any kind of sound operation are subject to the LGPL license (due to incorporation of mpglibdll and OpenAL).
+If you are using fonts, you are bound by the terms of FreeType's license. Somewhere in your software package should include a notice that your program includes the FreeType library (see licence_freetype_ftl.txt for details).
 Other components are licensed under various permissive licences.
-When sound components are included (thus the LGPL is in effect), the easiest way to meet terms of the LGPL is to make your program's source code (.BAS) available.
-If you are not using sound components, you do not need to release the program's source.
-If you are using fonts, you are bound by the terms of FreeType's license. Somewhere in your software package should include a notice that your program includes the FreeType library (see licence_freetype_ftl.txt for details)
 In all cases, you should distribute the licenses folder with your program.
 
 It should be noted that providing source code is not the only way to meet the conditions of the LGPL (eg dynamic linking) but it is by far the easiest from a technical point of view at this current time.
@@ -12,11 +9,11 @@ It should be noted that providing source code is not the only way to meet the co
 The license requirements for components of QB64 are as follows:
 
 Software/Library Name: QB64 (inclusive of all parts of this distribution not covered by separate licence below)
-Website(s): https://qb64.org
+Website(s): https://qb64.com
 License: MIT
 License Website: https://opensource.org/licenses/MIT
 License:
-Copyright 2007-2020 Galleon & The QB64 Team
+Copyright 2007-2022 Galleon & The QB64 Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -26,7 +23,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 
 Software/Library Name: MinGW 64
-Website: http://mingw-w64.sourceforge.net/
+Website: https://www.mingw-w64.org/
 License: (see below)
 Each of the various packages, which is distributed by MinGW.org, is governed by its own individual copyright and licensing terms. In summary, for the most commonly deployed packages:
 MinGW runtime: The MinGW base runtime package has been placed in the public domain, and is not governed by copyright. This basically means that you can do what you like with the code.
@@ -38,39 +35,26 @@ License Website: http://www.gnu.org/licenses/licenses.html#GPL
 License File: license_gnu_gpl_3.txt
 Location in QB64 distribution: internal/c/c_compiler/
 
-Software/Library Name: Opus Tools
-Website: http://www.opus-codec.org/
-License: BSD 2-clause license
-License Website: http://opensource.org/licenses/BSD-2-Clause
-License File: license_opus.txt
-Location in QB64 distribution: internal/c/parts/audio/conversion/
-OpusInfo, which is under a GPL licence, was included in Opus Tools but has been removed from the QB64 distribution.
+Software/Library Name: miniaudio
+Website(s): https://miniaud.io
+License: MIT No Attribution or Public Domain
+License Website: https://github.com/mackron/miniaudio/blob/master/LICENSE
+License File: license_miniaudio.txt
+Location in QB64 distribution: internal/c/parts/audio/out/
 
-Software/Library Name: mpglibdll
-Website(s):
-http://www.rz.uni-frankfurt.de/~pesch
-http://www.mpg123.de
-http://www.sulaco.org/mp3
-License: LGPL 2.1
-License Website: http://www.gnu.org/licenses/licenses.html#LGPL
-License File: license_gnu_lgpl_2_1.txt
-Location in QB64 distribution: internal/c/parts/audio/decode/mp3/
-
-Software/Library Name: Ogg Vorbis I audio decoder version 1.05
-Website:http://nothings.org/stb_vorbis/
-Date:Written in April 2007
-Author:Sean Barrett, sponsored by RAD Game Tools
-License: Placed in the public domain April 2007 by the author: no copyright is claimed, and you may use it for any purpose you like.
-License Website: N/A - public domain
-License File: license_stbvorbis.txt
+Software/Library Name: STB Vorbis
+Website: http://nothings.org/stb_vorbis/
+License: MIT License or Public Domain
+License Website: https://github.com/nothings/stb/blob/master/LICENSE
+License File: license_stb_vorbis.txt
 Location in QB64 distribution: internal/c/parts/audio/decode/ogg/
 
-Software/Library Name: OpenAL-soft
-Website:http://kcat.strangesoft.net/openal.html
-License: LGPL 2
-License Website: http://www.gnu.org/licenses/licenses.html#LGPL
-License File: license_gnu_lgpl_2.txt
-Location in QB64 distribution: internal/c/parts/audio/out/
+Software/Library Name: STB Image
+Website: http://nothings.org/
+License: MIT License or Public Domain
+License Website: https://github.com/nothings/stb/blob/master/LICENSE
+License File: license_stb_image.txt
+Location in QB64 distribution: internal/c/parts/video/image/
 
 Software/Library Name: FreeGLUT
 Website: http://freeglut.sourceforge.net/
@@ -90,13 +74,16 @@ license_freetype_ftl.txt
 license_gnu_gpl_2.txt
 Location in QB64 distribution: internal/c/parts/video/font/ttf/
 
-Software/Library Name: NanoJPEG - KeyJ's Tiny Baseline JPEG Decoder
-Author: Martin J. Fiedler <martin.fiedler@gmx.net>
+Software/Library Name: Libxmp-lite
+Website: http://xmp.sourceforge.net/
 License: MIT
-License File: license_nanojpeg.txt
-Location in QB64 distribution: internal/c/parts/video/image/decode/jpg
+License website: https://github.com/libxmp/libxmp/blob/master/lite/README
+License File: license_libxmp-lite.txt
+Location in QB64 distribution: internal/c/parts/audio/out/extras/libxmp-lite
 
-Software/Library Name: LodePNG
-License: (refer to license file)
-License File: license_lodepng.txt
-Location in QB64 distribution: internal/c/parts/video/image/decode/png
+Software/Library Name: TinySoundFont
+Website: https://github.com/schellingb/TinySoundFont
+License: MIT
+License website: https://github.com/schellingb/TinySoundFont/blob/master/LICENSE
+License File: license_tinysoundfont.txt
+Location in QB64 distribution: internal/c/parts/audio/out/extras/tinysoundfont
