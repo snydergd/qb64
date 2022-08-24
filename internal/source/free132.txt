@@ -69,3 +69,4 @@ while(tmp_long--) qbs_free((qbs*)((uint64*)(_FUNC_IDE2_ARRAY_STRING_RECENTFILESL
 free((void*)(_FUNC_IDE2_ARRAY_STRING_RECENTFILESLIST[0]));
 }
 free_mem_lock( (mem_lock*)((ptrszint*)_FUNC_IDE2_ARRAY_STRING_RECENTFILESLIST)[8] );
+qbs_free(_FUNC_IDE2_STRING_DOCUMENT_TITLE);
