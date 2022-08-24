@@ -4491,14 +4491,6 @@ int32 x_monitor=0,y_monitor=0;
 int32 conversion_required=0;
 uint32 *conversion_layer=(uint32*)malloc(8);
 
-#define AUDIO_CHANNELS 256
-
-#define sndqueue_lastindex 9999
-uint32 sndqueue[sndqueue_lastindex+1];
-int32 sndqueue_next=0;
-int32 sndqueue_first=0;
-int32 sndqueue_wait=-1;
-int32 sndqueue_played=0;
 
 
 void call_int(int32 i);
@@ -16539,19 +16531,7 @@ void sub_put2(int32 i,int64 offset,void *element,int32 passed){
     
     
     
-    #ifdef QB64_BACKSLASH_FILESYSTEM
-        #include "parts\\audio\\out\\src.c"
-        #else
-        #include "parts/audio/out/src.c"
-    #endif
-    
-    #ifdef QB64_BACKSLASH_FILESYSTEM
-        #include "parts\\audio\\conversion\\src.c"
-        #include "parts\\audio\\decode\\src.c"
-        #else
-        #include "parts/audio/conversion/src.c"
-        #include "parts/audio/decode/src.c"
-    #endif
+    #include "parts/audio/out/src.c"
     
     #ifdef DEPENDENCY_ZLIB
         #ifdef QB64_BACKSLASH_FILESYSTEM

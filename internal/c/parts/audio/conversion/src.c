@@ -2,11 +2,5 @@
 //Stubs:
 //(none required)
 #else
-
-#ifdef QB64_BACKSLASH_FILESYSTEM
- #include "src\\speex_resampler.h"
-#else
- #include "src/speex_resampler.h"
-#endif
-
+// TODO: Get rid of this entire conversion directory and it's content. This is just a stub!
 #endif
