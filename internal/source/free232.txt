@@ -1,4 +1,4 @@
-if(oldstr6284){
-if(oldstr6284->fixed)qbs_set(oldstr6284,_SUB_CLEANSUBNAME_STRING_N);
+if(oldstr6286){
+if(oldstr6286->fixed)qbs_set(oldstr6286,_SUB_CLEANSUBNAME_STRING_N);
 qbs_free(_SUB_CLEANSUBNAME_STRING_N);
 }

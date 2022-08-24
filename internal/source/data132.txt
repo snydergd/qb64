@@ -2530,3 +2530,9 @@ int64 fornext_value4604;
 int64 fornext_finalvalue4604;
 int64 fornext_step4604;
 uint8 fornext_step_negative4604;
+qbs *_FUNC_IDE2_STRING_DOCUMENT_TITLE=NULL;
+if (!_FUNC_IDE2_STRING_DOCUMENT_TITLE)_FUNC_IDE2_STRING_DOCUMENT_TITLE=qbs_new(0,0);
+byte_element_struct *byte_element_4607=NULL;
+if (!byte_element_4607){
+if ((mem_static_pointer+=12)<mem_static_limit) byte_element_4607=(byte_element_struct*)(mem_static_pointer-12); else byte_element_4607=(byte_element_struct*)mem_static_malloc(12);
+}
