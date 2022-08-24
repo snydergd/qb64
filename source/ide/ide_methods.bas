@@ -469,13 +469,15 @@ FUNCTION ide2 (ignore)
         menuDesc$(m, i - 1) = "Displays keyword index page"
         menu$(m, i) = "#Keywords by Usage": i = i + 1
         menuDesc$(m, i - 1) = "Displays keywords index by usage"
-        menu$(m, i) = "-": i = i + 1
-        menu$(m, i) = "#Update Current Page": i = i + 1
-        menuDesc$(m, i - 1) = "Downloads the latest version of an article from the wiki"
-        menu$(m, i) = "Update All #Pages...": i = i + 1
-        menuDesc$(m, i - 1) = "Downloads the latest version of all articles from the wiki"
-        menu$(m, i) = "View Current Page On #Wiki": i = i + 1
-        menuDesc$(m, i - 1) = "Launches the default browser and navigates to the current article on the wiki"
+        if 1=0 then ' removing the "View on Wiki" - @dualbrain
+          menu$(m, i) = "-": i = i + 1
+          menu$(m, i) = "#Update Current Page": i = i + 1
+          menuDesc$(m, i - 1) = "Downloads the latest version of an article from the wiki"
+          menu$(m, i) = "Update All #Pages...": i = i + 1
+          menuDesc$(m, i - 1) = "Downloads the latest version of all articles from the wiki"
+          menu$(m, i) = "View Current Page On #Wiki": i = i + 1
+          menuDesc$(m, i - 1) = "Launches the default browser and navigates to the current article on the wiki"
+        end if
         menu$(m, i) = "-": i = i + 1
         'menu$(m, i) = "Check for #Newer Version...": i = i + 1
         'menuDesc$(m, i - 1) = "Displays the current version of QB64"
@@ -2254,7 +2256,8 @@ FUNCTION ide2 (ignore)
 
         IF IdeSystem = 3 THEN
 
-            IF mCLICK OR K$ = CHR$(27) THEN
+            ' removing the help "red x" - @dualbrain
+            IF (1=0 AND mCLICK) OR K$ = CHR$(27) THEN
                 IF (mY = idewy AND (mX >= idewx - 3 AND mX <= idewx - 1)) OR K$ = CHR$(27) THEN 'close help
                     closeHelp:
                     idewy = idewy + idesubwindow
@@ -2268,7 +2271,8 @@ FUNCTION ide2 (ignore)
 
 
             IF mCLICK THEN
-                IF (mY = idewy AND (mX >= idewx - 17 AND mX <= idewx - 4)) THEN 'view on wiki
+                ' removing the "View on Wiki" - @dualbrain
+                IF 1=0 AND (mY = idewy AND (mX >= idewx - 17 AND mX <= idewx - 4)) THEN 'view on wiki
                     launchWiki:
                     url$ = StrReplace$(wikiBaseAddress$ + "/" + Back$(Help_Back_Pos), " ", "%20")
                     IF INSTR(_OS$, "WIN") = 0 THEN
@@ -2288,7 +2292,8 @@ FUNCTION ide2 (ignore)
                     GOTO specialchar
                 END IF
 
-                IF mY = idewy THEN
+                ' removing the help "breadcrumb" - @dualbrain
+                IF 1=0 AND mY = idewy THEN
 
                     sx = 2
                     FOR x = Back_Str_Pos TO Back_Str_Pos + idewx - 6
@@ -5300,13 +5305,15 @@ FUNCTION ide2 (ignore)
                 GOTO ideloop
             END IF
 
-            IF menu$(m, s) = "View Current Page On #Wiki" THEN
+            ' removing the "View on Wiki" - @dualbrain
+            IF 1=0 AND menu$(m, s) = "View Current Page On #Wiki" THEN
                 PCOPY 3, 0: SCREEN , , 3, 0
                 IF idehelp THEN GOTO launchWiki
                 GOTO ideloop
             END IF
 
-            IF menu$(m, s) = "#Update Current Page" THEN
+            ' removing the "View on Wiki" - @dualbrain
+            IF 1=0 AND menu$(m, s) = "#Update Current Page" THEN
                 PCOPY 3, 0: SCREEN , , 3, 0
                 IF idehelp THEN
                     Help_IgnoreCache = 1
@@ -5386,7 +5393,8 @@ FUNCTION ide2 (ignore)
                 GOTO ideloop
             END IF
 
-            IF menu$(m, s) = "Update All #Pages..." THEN
+            ' removing the "View on Wiki" - @dualbrain
+            IF 1=0 AND menu$(m, s) = "Update All #Pages..." THEN
                 PCOPY 2, 0
                 q$ = ideyesnobox("Update Help", "This can take up to 10 minutes.\nRedownload all cached help content from the wiki?")
                 PCOPY 2, 0
@@ -6380,7 +6388,9 @@ FUNCTION ide2 (ignore)
     IF idehelp = 1 THEN
         COLOR 7, 0: idebox 1, idewy, idewx, idesubwindow + 1
         COLOR 7, 0: _PRINTSTRING (1, idewy), CHR$(195): _PRINTSTRING (idewx, idewy), CHR$(180)
-        COLOR 15, 4: _PRINTSTRING (idewx - 3, idewy), " x "
+        IF 1=0 THEN ' removing the help "red x" - @dualbrain
+            COLOR 15, 4: _PRINTSTRING (idewx - 3, idewy), " x "
+        END IF
     END IF
 
     GOSUB UpdateSearchBar
@@ -6434,48 +6444,57 @@ FUNCTION ide2 (ignore)
     END IF
     RETURN
 
-    HelpAreaShowBackLinks:
-    Back_Str$ = STRING$(1000, 0)
-    Back_Str_I$ = STRING$(4000, 0)
-    top = UBOUND(back$)
-    FOR x = 1 TO top
-        n$ = Back_Name$(x)
-        IF x = Help_Back_Pos THEN p = LEN(Back_Str$)
-        Back_Str$ = Back_Str$ + " "
-        Back_Str_I$ = Back_Str_I$ + MKL$(x)
-        FOR x2 = 1 TO LEN(n$)
-            Back_Str$ = Back_Str$ + CHR$(ASC(n$, x2))
+HelpAreaShowBackLinks:
+    IF 1=0 THEN ' removing the help "breadcrumb" - @dualbrain
+        Back_Str$ = STRING$(1000, 0)
+        Back_Str_I$ = STRING$(4000, 0)
+        top = UBOUND(back$)
+        FOR x = 1 TO top
+            n$ = Back_Name$(x)
+            IF x = Help_Back_Pos THEN p = LEN(Back_Str$)
+            Back_Str$ = Back_Str$ + " "
             Back_Str_I$ = Back_Str_I$ + MKL$(x)
-        NEXT
-        Back_Str$ = Back_Str$ + " "
-        Back_Str_I$ = Back_Str_I$ + MKL$(x)
+            FOR x2 = 1 TO LEN(n$)
+                Back_Str$ = Back_Str$ + CHR$(ASC(n$, x2))
+                Back_Str_I$ = Back_Str_I$ + MKL$(x)
+            NEXT
+            Back_Str$ = Back_Str$ + " "
+            Back_Str_I$ = Back_Str_I$ + MKL$(x)
 
-        IF x <> top THEN
-            Back_Str$ = Back_Str$ + CHR$(0)
-            Back_Str_I$ = Back_Str_I$ + MKL$(0)
-        END IF
-    NEXT
-    Back_Str$ = Back_Str$ + STRING$(1000, 0)
-    Back_Str_I$ = Back_Str_I$ + STRING$(4000, 0)
-    Back_Str_Pos = p - idewx \ 2 + (LEN(Back_Name$(Help_Back_Pos)) + 2) \ 2 + 3
-    'COLOR 1, 2
-    'LOCATE idewy, 2: PRINT MID$(Back_Str$, Back_Str_Pos, idewx - 5)
-    LOCATE idewy, 2
-    FOR x = Back_Str_Pos TO Back_Str_Pos + idewx - 6
-        i = CVL(MID$(Back_Str_I$, (x - 1) * 4 + 1, 4))
-        a = ASC(Back_Str$, x)
-        IF a THEN
-            IF IdeSystem = 3 THEN COLOR 0, 7 ELSE COLOR 7, 0
-            IF i < Help_Back_Pos THEN COLOR 9
-            IF i > Help_Back_Pos THEN COLOR 9
-            PRINT CHR$(a);
-        ELSE
-            COLOR 7, 0
-            PRINT CHR$(196);
-        END IF
-    NEXT
-    COLOR 7, 0: _PRINTSTRING (idewx - 18, idewy), CHR$(180)
-    COLOR 15, 3: _PRINTSTRING (idewx - 17, idewy), " View on Wiki "
+            IF x <> top THEN
+                Back_Str$ = Back_Str$ + CHR$(0)
+                Back_Str_I$ = Back_Str_I$ + MKL$(0)
+            END IF
+        NEXT
+        Back_Str$ = Back_Str$ + STRING$(1000, 0)
+        Back_Str_I$ = Back_Str_I$ + STRING$(4000, 0)
+        Back_Str_Pos = p - idewx \ 2 + (LEN(Back_Name$(Help_Back_Pos)) + 2) \ 2 + 3
+        'COLOR 1, 2
+        'LOCATE idewy, 2: PRINT MID$(Back_Str$, Back_Str_Pos, idewx - 5)
+        LOCATE idewy, 2
+        FOR x = Back_Str_Pos TO Back_Str_Pos + idewx - 6
+            i = CVL(MID$(Back_Str_I$, (x - 1) * 4 + 1, 4))
+            a = ASC(Back_Str$, x)
+            IF a THEN
+                IF IdeSystem = 3 THEN COLOR 0, 7 ELSE COLOR 7, 0
+                IF i < Help_Back_Pos THEN COLOR 9
+                IF i > Help_Back_Pos THEN COLOR 9
+                PRINT CHR$(a);
+            ELSE
+                COLOR 7, 0
+                PRINT CHR$(196);
+            END IF
+        NEXT
+    ELSE 
+        'TODO: Need to show the "HELP: {document name}" instead of "breadcrumb".
+        COLOR 0, 7
+        Document_Title$ = "QB64 Help Index" ' For now, hardcoded to test layout.
+        LOCATE idewy, (idewx - (LEN(Document_Title$) + 8)) \ 2 : PRINT " HELP: " + Document_Title$ + " "
+    END IF
+    IF 1=0 THEN ' removing the "View on Wiki" - @dualbrain
+        'COLOR 7, 0: _PRINTSTRING (idewx - 18, idewy), CHR$(180)
+        'COLOR 15, 3: _PRINTSTRING (idewx - 17, idewy), " View on Wiki "
+    END IF
     RETURN
 
     showVarListReady:
@@ -18439,13 +18458,15 @@ SUB IdeMakeContextualMenu
             menuDesc$(m, i - 1) = "Displays keyword index page"
             menu$(m, i) = "#Keywords by Usage": i = i + 1
             menuDesc$(m, i - 1) = "Displays keywords index by usage"
-            menu$(m, i) = "-": i = i + 1
-            menu$(m, i) = "#Update Current Page": i = i + 1
-            menuDesc$(m, i - 1) = "Downloads the latest version of this article from the wiki"
-            menu$(m, i) = "Update All #Pages...": i = i + 1
-            menuDesc$(m, i - 1) = "Downloads the latest version of all articles from the wiki"
-            menu$(m, i) = "View Current Page On #Wiki": i = i + 1
-            menuDesc$(m, i - 1) = "Launches the default browser and navigates to the current article on the wiki"
+            if 1=0 then ' removing the "View on Wiki" - @dualbrain
+              menu$(m, i) = "-": i = i + 1
+              menu$(m, i) = "#Update Current Page": i = i + 1
+              menuDesc$(m, i - 1) = "Downloads the latest version of this article from the wiki"
+              menu$(m, i) = "Update All #Pages...": i = i + 1
+              menuDesc$(m, i - 1) = "Downloads the latest version of all articles from the wiki"
+              menu$(m, i) = "View Current Page On #Wiki": i = i + 1
+              menuDesc$(m, i - 1) = "Launches the default browser and navigates to the current article on the wiki"
+            end if
             menu$(m, i) = "-": i = i + 1
             menu$(m, i) = "Clo#se Help  ESC": i = i + 1
             menuDesc$(m, i - 1) = "Closes help window"
