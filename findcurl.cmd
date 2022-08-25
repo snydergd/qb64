@@ -16,8 +16,12 @@ if %ERRORLEVEL == 9009 (
     mkdir internal\curl >NUL
     echo Fetching %LINK%
     explorer %LINK%
-rem we should wait until the file is downloaded, because explorer returns straight away
-    "%SystemRoot%\system32\expand.exe" "%USERPROFILE%\Desktop\%CURLVERSION%" /F:* internal\curl
+
+    rem grab the arch. We'll need this to extract files.
+    reg Query "HKLM\Hardware\Description\System\CentralProcessor\0" | find /i "x86" > NUL && set ARCH=i386|| set ARCH=amd64
+
+    rem we should wait until the file is downloaded, because explorer returns straight away
+    "%SystemRoot%\system32\expand.exe" "%USERPROFILE%\Desktop\%CURLVERSION%" /F:%ARCH%\* internal\curl
 
     rem Add to path
     PATH=%PATH%;%~dp0\internal\curl
