@@ -9,12 +9,12 @@ set DLPAGE=http://skanthak.homepage.t-online.de/download
 set CURLVERSION=curl-7.64.1.cab
 set LINK=%DLPAGE%/%CURLVERSION%
 rem Check if curl exists
-echo Fetching %LINK%
 
 curl --version 2>NUL 1>&2
 
 if %ERRORLEVEL == 9009 (
     mkdir internal\curl >NUL
+    echo Fetching %LINK%
     explorer %LINK%
 rem we should wait until the file is downloaded, because explorer returns straight away
     "%SystemRoot%\system32\expand.exe" "%USERPROFILE%\Desktop\%CURLVERSION%" /F:* internal\curl
