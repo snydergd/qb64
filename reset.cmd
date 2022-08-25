@@ -43,6 +43,9 @@ if exist internal\c\libqb\src rmdir /s /q internal\c\libqb\src
 echo Remove mingw64.
 if exist mingw64 rmdir /s /q mingw64
 
+echo Remove mingw32
+if exist mingw32 rmdir /s /q mingw64
+
 echo Remove internal/version.txt
 if exist internal\version.txt del internal\version.txt
 
