@@ -1,6 +1,6 @@
 # QB64
 
-![QB64](source/qb64icon32.png)
+![QB64](source/qb64.png)
 
 QB64 is a modern extended BASIC+OpenGL language that retains QB4.5/QBasic compatibility and compiles native binaries for Windows (XP and up), Linux and macOS.
 =======
