@@ -1,11 +1,7 @@
-'
-' String manipulation functions
-'
-
-FUNCTION StrRemove$ (myString$, whatToRemove$) 'noncase sensitive
+''' String manipulation functions
+FUNCTION StrRemove$ (myString$, whatToRemove$) ' noncase sensitive
     DIM a$, b$
     DIM AS LONG i
-
     a$ = myString$
     b$ = LCASE$(whatToRemove$)
     i = INSTR(LCASE$(a$), b$)
@@ -16,7 +12,7 @@ FUNCTION StrRemove$ (myString$, whatToRemove$) 'noncase sensitive
     StrRemove$ = a$
 END FUNCTION
 
-FUNCTION StrReplace$ (myString$, find$, replaceWith$) 'noncase sensitive
+FUNCTION StrReplace$ (myString$, find$, replaceWith$) ' noncase sensitive
     DIM a$, b$
     DIM AS LONG basei, i
     IF LEN(myString$) = 0 THEN EXIT FUNCTION
