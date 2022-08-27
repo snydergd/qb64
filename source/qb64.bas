@@ -3383,18 +3383,22 @@ DO
                     ELSE
                         IF LEN(ideprogname) THEN IconPath$ = idepath$ + pathsep$
                     END IF
+
                     ExeIconFile$ = IconPath$ + MID$(ExeIconFile$, 3)
                 ELSEIF INSTR(ExeIconFile$, "/") OR INSTR(ExeIconFile$, "\") THEN
                     FOR i = LEN(ExeIconFile$) TO 1 STEP -1
                         IF MID$(ExeIconFile$, i, 1) = "/" OR MID$(ExeIconFile$, i, 1) = "\" THEN
                             IconPath$ = LEFT$(ExeIconFile$, i)
-                            ExeIconFile$ = MID$(ExeIconFile$, i + 1)
-                            IF _DIREXISTS(IconPath$) = 0 THEN a$ = "File '" + ExeIconFile$ + "' not found": GOTO errmes
+                            ExeIconFileOnly$ = MID$(ExeIconFile$, i + 1)
+
+                            IF _DIREXISTS(IconPath$) = 0 THEN a$ = "File '" + ExeIconFileOnly$ + "' not found": GOTO errmes
+
                             currentdir$ = _CWD$
                             CHDIR IconPath$
                             IconPath$ = _CWD$
                             CHDIR currentdir$
-                            ExeIconFile$ = IconPath$ + pathsep$ + ExeIconFile$
+
+                            ExeIconFile$ = IconPath$ + pathsep$ + ExeIconFileOnly$
                             EXIT FOR
                         END IF
                     NEXT
