@@ -12862,6 +12862,7 @@ SUB ideshowtext
                 'Restore BG color in case a matching bracket was printed with different BG
                 IF l = idecy THEN COLOR , 6
                 IF isKeyword > 0 THEN isKeyword = isKeyword - 1
+                IF isKeyword = 0 AND checkKeyword$ = "REM" THEN comment = -1
                 IF isKeyword = 0 THEN checkKeyword$ = "": metacommand = 0: is_Number = 0: isCustomKeyword = 0
             NEXT m
 
@@ -18806,6 +18807,7 @@ FUNCTION ideupdatehelpbox
         END IF
         'end of custom controls
 
+        updateRoutine:
         '-------- update routine -------------------------------------
         SELECT CASE UpdateStep
             CASE 1
