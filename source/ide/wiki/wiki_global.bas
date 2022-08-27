@@ -12,6 +12,7 @@ DIM SHARED Help_ww, Help_wh 'width & height of text region
 DIM SHARED help_h, help_w 'width & height
 DIM SHARED Help_Txt$ '[chr][col][link-byte1][link-byte2]
 DIM SHARED Help_Txt_Len
+DIM SHARED Help_Pos, Help_Wrap_Pos
 DIM SHARED Help_Line$ 'index of first txt element of a line
 DIM SHARED Help_Link$ 'the link info [sep][type:]...[sep]
 DIM SHARED Help_Link_Sep$: Help_Link_Sep$ = CHR$(13)
@@ -20,7 +21,6 @@ DIM SHARED Help_NewLineIndent
 DIM SHARED Help_Underline
 'Link Types:
 ' PAGE:wikipagename
-DIM SHARED Help_Pos, Help_Wrap_Pos
 DIM SHARED Help_BG_Col
 DIM SHARED Help_Col_Normal: Help_Col_Normal = 7
 DIM SHARED Help_Col_Link: Help_Col_Link = 9

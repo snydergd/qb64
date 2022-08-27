@@ -1,11 +1,7 @@
-'
-' String manipulation functions
-'
-
-FUNCTION StrRemove$ (myString$, whatToRemove$) 'noncase sensitive
+''' String manipulation functions
+FUNCTION StrRemove$ (myString$, whatToRemove$) ' noncase sensitive
     DIM a$, b$
     DIM AS LONG i
-
     a$ = myString$
     b$ = LCASE$(whatToRemove$)
     i = INSTR(LCASE$(a$), b$)
@@ -16,7 +12,7 @@ FUNCTION StrRemove$ (myString$, whatToRemove$) 'noncase sensitive
     StrRemove$ = a$
 END FUNCTION
 
-FUNCTION StrReplace$ (myString$, find$, replaceWith$) 'noncase sensitive
+FUNCTION StrReplace$ (myString$, find$, replaceWith$) ' noncase sensitive
     DIM a$, b$
     DIM AS LONG basei, i
     IF LEN(myString$) = 0 THEN EXIT FUNCTION
@@ -30,4 +26,92 @@ FUNCTION StrReplace$ (myString$, find$, replaceWith$) 'noncase sensitive
         i = INSTR(basei, LCASE$(a$), b$)
     LOOP
     StrReplace$ = a$
+END FUNCTION
+
+FUNCTION AddQuotes$ (s$)
+    AddQuotes$ = CHR$(34) + s$ + CHR$(34)
+END FUNCTION
+
+' Convert a boolean value to 'True' or 'False'.
+FUNCTION BoolToTFString$ (b AS LONG)
+    IF b THEN
+        BoolToTFString$ = "True"
+    ELSE
+        BoolToTFString$ = "False"
+    END IF
+END FUNCTION
+
+' Convert 'True' or 'False' to a boolean value.
+' Any string not 'True' or 'False' is returned as -2.
+FUNCTION TFStringToBool% (s AS STRING)
+    DIM s2 AS STRING
+    s2 = _TRIM$(UCASE$(s))
+    IF s2 = "TRUE" THEN
+        TFStringToBool% = -1
+    ELSEIF s2 = "FALSE" THEN
+        TFStringToBool% = 0
+    ELSE
+        TFStringToBool% = -2
+    END IF
+END FUNCTION
+
+''' Reads the bool setting at section:setting. 
+''' If it is not there or invalid, writes the default value to it.
+FUNCTION ReadWriteBooleanSettingValue% (section AS STRING, setting AS STRING, default AS INTEGER)
+    
+    DIM checkResult AS INTEGER
+    DIM value AS STRING
+    DIM result AS INTEGER
+
+    result = ReadConfigSetting(section, setting, value)
+
+    checkResult = TFStringToBool%(value)
+
+    IF checkResult = -2 THEN
+        WriteConfigSetting section, setting, BoolToTFString$(default)
+        ReadWriteBooleanSettingValue% = default
+    ELSE
+        ReadWriteBooleanSettingValue% = checkResult
+    END IF
+
+END FUNCTION
+
+''' Reads the string setting at section:setting. 
+''' If it is not there or invalid, writes the default value to it.
+FUNCTION ReadWriteStringSettingValue$ (section AS STRING, setting AS STRING, default AS STRING)
+
+    DIM value AS STRING
+    DIM result AS INTEGER
+
+    result = ReadConfigSetting(section, setting, value)
+
+    IF result = 0 THEN
+        WriteConfigSetting section, setting, default
+        ReadWriteStringSettingValue$ = default
+    ELSE
+        ReadWriteStringSettingValue$ = value
+    END IF
+
+END FUNCTION
+
+''' Reads the integer setting at section:setting. 
+''' If it is not there or invalid, writes the default value to it.
+''' Verifies the value is positive and non-zero.
+FUNCTION ReadWriteLongSettingValue& (section AS STRING, setting AS STRING, default AS LONG)
+
+    DIM value AS STRING
+    DIM result AS INTEGER
+    DIM checkResult AS LONG
+
+    result = ReadConfigSetting(section, setting, value)
+
+    checkResult = VAL(value)
+
+    IF result = 0 OR checkResult <= 0 THEN
+        WriteConfigSetting section, setting, str2$(default)
+        ReadWriteLongSettingValue& = default
+    ELSE
+        ReadWriteLongSettingValue& = checkResult
+    END IF
+
 END FUNCTION

@@ -10,6 +10,17 @@ $CONSOLE
 'Initially the "SCREEN" will be hidden, if the -x option is used it will never be created
 $SCREENHIDE
 
+$EXEICON:'./qb64.ico'
+
+$VERSIONINFO:CompanyName=QB64
+$VERSIONINFO:FileDescription=QB64 IDE and Compiler
+$VERSIONINFO:InternalName=qb64.bas
+$VERSIONINFO:LegalCopyright=MIT
+$VERSIONINFO:LegalTrademarks=
+$VERSIONINFO:OriginalFilename=qb64.exe
+$VERSIONINFO:ProductName=QB64
+$VERSIONINFO:Comments=QB64 is a modern extended BASIC programming language that retains QB4.5/QBasic compatibility and compiles native binaries for Windows, Linux and macOS.
+
 '$INCLUDE:'global\version.bas'
 '$INCLUDE:'global\settings.bas'
 '$INCLUDE:'global\constants.bas'
@@ -25,6 +36,8 @@ REDIM SHARED OName(1000) AS STRING 'Operation Name
 REDIM SHARED PL(1000) AS INTEGER 'Priority Level
 REDIM SHARED PP_TypeMod(0) AS STRING, PP_ConvertedMod(0) AS STRING 'Prepass Name Conversion variables.
 Set_OrderOfOperations
+
+DIM SHARED NoExeSaved AS INTEGER
 
 DIM SHARED vWatchOn, vWatchRecompileAttempts, vWatchDesiredState, vWatchErrorCall$
 DIM SHARED vWatchNewVariable$, vWatchVariableExclusions$
@@ -1060,7 +1073,37 @@ IF C = 9 THEN 'run
 
     'execute program
 
+
+
+
     IF iderunmode = 1 THEN
+        IF NoExeSaved THEN
+            'This is the section which deals with if the user selected to run the program without
+            'saving an EXE file to the disk.
+            'We start off by first running the EXE, and then we delete it from the drive.
+            'making it a temporary file when all is said and done.
+            IF os$ = "WIN" THEN
+                SHELL QuotedFilename$(CHR$(34) + lastBinaryGenerated$ + CHR$(34)) + ModifyCOMMAND$ 'run the newly created program
+                SHELL _HIDE _DONTWAIT "del " + QuotedFilename$(CHR$(34) + lastBinaryGenerated$ + CHR$(34)) 'kill it
+            END IF
+            IF path.exe$ = "" THEN path.exe$ = "./"
+            IF os$ = "LNX" THEN
+                IF LEFT$(lastBinaryGenerated$, LEN(path.exe$)) = path.exe$ THEN
+                    SHELL QuotedFilename$(lastBinaryGenerated$) + ModifyCOMMAND$
+                    KILL lastBinaryGenerated$
+                ELSE
+                    SHELL QuotedFilename$(path.exe$ + lastBinaryGenerated$) + ModifyCOMMAND$
+                    KILL path.exe$ + lastBinaryGenerated$
+                END IF
+            END IF
+            IF path.exe$ = "./" THEN path.exe$ = ""
+            NoExeSaved = 0 'reset the flag for a temp EXE
+            sendc$ = CHR$(6) 'ready
+            GOTO sendcommand
+        END IF
+
+
+
         IF os$ = "WIN" THEN SHELL _DONTWAIT QuotedFilename$(CHR$(34) + lastBinaryGenerated$ + CHR$(34)) + ModifyCOMMAND$
         IF path.exe$ = "" THEN path.exe$ = "./"
         IF os$ = "LNX" THEN
@@ -3340,18 +3383,22 @@ DO
                     ELSE
                         IF LEN(ideprogname) THEN IconPath$ = idepath$ + pathsep$
                     END IF
+
                     ExeIconFile$ = IconPath$ + MID$(ExeIconFile$, 3)
                 ELSEIF INSTR(ExeIconFile$, "/") OR INSTR(ExeIconFile$, "\") THEN
                     FOR i = LEN(ExeIconFile$) TO 1 STEP -1
                         IF MID$(ExeIconFile$, i, 1) = "/" OR MID$(ExeIconFile$, i, 1) = "\" THEN
                             IconPath$ = LEFT$(ExeIconFile$, i)
-                            ExeIconFile$ = MID$(ExeIconFile$, i + 1)
-                            IF _DIREXISTS(IconPath$) = 0 THEN a$ = "File '" + ExeIconFile$ + "' not found": GOTO errmes
+                            ExeIconFileOnly$ = MID$(ExeIconFile$, i + 1)
+
+                            IF _DIREXISTS(IconPath$) = 0 THEN a$ = "File '" + ExeIconFileOnly$ + "' not found": GOTO errmes
+
                             currentdir$ = _CWD$
                             CHDIR IconPath$
                             IconPath$ = _CWD$
                             CHDIR currentdir$
-                            ExeIconFile$ = IconPath$ + pathsep$ + ExeIconFile$
+
+                            ExeIconFile$ = IconPath$ + pathsep$ + ExeIconFileOnly$
                             EXIT FOR
                         END IF
                     NEXT
@@ -13616,28 +13663,6 @@ FUNCTION Type2MemTypeValue (t1)
     END IF
     Type2MemTypeValue = t
 END FUNCTION
-
-FUNCTION FileHasExtension (f$)
-    FOR i = LEN(f$) TO 1 STEP -1
-        a = ASC(f$, i)
-        IF a = 47 OR a = 92 THEN EXIT FOR
-        IF a = 46 THEN FileHasExtension = -1: EXIT FUNCTION
-    NEXT
-END FUNCTION
-
-FUNCTION RemoveFileExtension$ (f$) 'returns f$ without extension
-    FOR i = LEN(f$) TO 1 STEP -1
-        a = ASC(f$, i)
-        IF a = 47 OR a = 92 THEN EXIT FOR
-        IF a = 46 THEN RemoveFileExtension$ = LEFT$(f$, i - 1): EXIT FUNCTION
-    NEXT
-    RemoveFileExtension$ = f$
-END FUNCTION
-
-
-
-
-
 
 'udt is non-zero if this is an array of udt's, to allow examining each udt element
 FUNCTION allocarray (n2$, elements$, elementsize, udt)
@@ -24313,17 +24338,6 @@ FUNCTION lineinput3$
     END IF
 END FUNCTION
 
-FUNCTION getfilepath$ (f$)
-    FOR i = LEN(f$) TO 1 STEP -1
-        a$ = MID$(f$, i, 1)
-        IF a$ = "/" OR a$ = "\" THEN
-            getfilepath$ = LEFT$(f$, i)
-            EXIT FUNCTION
-        END IF
-    NEXT
-    getfilepath$ = ""
-END FUNCTION
-
 FUNCTION eleucase$ (a$)
     'this function upper-cases all elements except for quoted strings
     'check first element
@@ -24425,19 +24439,6 @@ FUNCTION GDB_Fix$ (g_command$) 'edit a gcc/g++ command line to include debugging
     END IF
     GDB_Fix$ = c$
 END FUNCTION
-
-
-SUB PATH_SLASH_CORRECT (a$)
-    IF os$ = "WIN" THEN
-        FOR x = 1 TO LEN(a$)
-            IF ASC(a$, x) = 47 THEN ASC(a$, x) = 92
-        NEXT
-    ELSE
-        FOR x = 1 TO LEN(a$)
-            IF ASC(a$, x) = 92 THEN ASC(a$, x) = 47
-        NEXT
-    END IF
-END SUB
 
 'Steve Subs/Functins for _MATH support with CONST
 FUNCTION Evaluate_Expression$ (e$)
@@ -24908,19 +24909,20 @@ FUNCTION EvaluateNumbers$ (p, num() AS STRING)
                         EXIT FUNCTION
                     END IF
                 CASE "\"
-                    IF VAL(num(2)) <> 0 THEN
-                        n1 = VAL(num(1)) \ VAL(num(2))
-                    ELSE
+                    IF FIX(VAL(num(2))) = 0 THEN
                         EvaluateNumbers$ = "ERROR - Division By Zero"
                         EXIT FUNCTION
                     END IF
+
+                    n1 = VAL(num(1)) \ FIX(VAL(num(2)))
                 CASE "MOD"
-                    IF VAL(num(2)) <> 0 THEN
-                        n1 = VAL(num(1)) MOD VAL(num(2))
-                    ELSE
+                    IF FIX(VAL(num(2))) = 0 THEN
                         EvaluateNumbers$ = "ERROR - Division By Zero"
                         EXIT FUNCTION
                     END IF
+
+                    n1 = VAL(num(1)) MOD FIX(VAL(num(2)))
+
                 CASE "+": n1 = VAL(num(1)) + VAL(num(2))
                 CASE "-":
                     n1 = VAL(num(1)) - VAL(num(2))
@@ -26298,6 +26300,7 @@ SUB increaseUDTArrays
 END SUB
 
 '$INCLUDE:'utilities\strings.bas'
+'$INCLUDE:'utilities\file.bas'
 '$INCLUDE:'subs_functions\extensions\opengl\opengl_methods.bas'
 '$INCLUDE:'utilities\ini-manager\ini.bm'
 
