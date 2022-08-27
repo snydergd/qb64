@@ -19868,10 +19868,30 @@ FUNCTION findHelpTopic$(topic$, lnks, firstOnly AS _BYTE)
     'check if topic$ is in help links
     '    - returns a list of help links separated by CHR$(0)
     '    - returns the total number of links found by changing 'lnks'
-    a2$ = UCASE$(topic$)
-    fh = FREEFILE
-    OPEN "internal\help\links.bin" FOR BINARY AS #fh
     lnks = 0: lnks$ = CHR$(0)
+    fh = FREEFILE
+    '----------
+    linksFileExist = _FILEEXISTS("internal\help\links.bin")
+    IF linksFileExist THEN
+        OPEN "internal\help\links.bin" FOR INPUT AS #fh
+        linksFileEmpty = (LOF(fh) = 0): CLOSE #fh
+    END IF
+    IF (NOT linksFileExist) OR linksFileEmpty THEN
+        q$ = ideyesnobox("Help problem", "The help system is not yet initialized,\ndo it now? (Make sure you're online.)")
+        PCOPY 3, 0: SCREEN , , 3, 0
+        IF q$ = "N" GOTO noLinksFile
+        Help_IgnoreCache = 1
+        a$ = Wiki$("Keyword Reference - Alphabetical")
+        Help_IgnoreCache = 0
+        IF INSTR(a$, "{{PageInternalError}}") THEN
+            lnks = 1: lnks$ = lnks$ + "Initialize" + CHR$(0)
+            GOTO noLinksFile
+        END IF
+        Help_ww = 78: WikiParse a$ 'assume standard IDE width for parsing
+    END IF
+    '----------
+    a2$ = UCASE$(topic$)
+    OPEN "internal\help\links.bin" FOR INPUT AS #fh
     DO UNTIL EOF(fh)
         LINE INPUT #fh, l$
         c = INSTR(l$, ","): l1$ = LEFT$(l$, c - 1): l2$ = RIGHT$(l$, LEN(l$) - c)
@@ -19888,6 +19908,7 @@ FUNCTION findHelpTopic$(topic$, lnks, firstOnly AS _BYTE)
         END IF
     LOOP
     CLOSE #fh
+    noLinksFile:
     findHelpTopic$ = lnks$
 END FUNCTION
 
