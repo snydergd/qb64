@@ -6,7 +6,7 @@ internal/temp*
 *.bas
 internal/config*.txt
 internal/config.ini
-internal/help
+# internal/help
 internal/version.txt
 tempfoldersearch.bin
 internal/c/mingw32

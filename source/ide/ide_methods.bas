@@ -467,7 +467,7 @@ FUNCTION ide2 (ignore)
         menuDesc$(m, i - 1) = "Displays help contents page"
         menu$(m, i) = "Keyword #Index": i = i + 1
         menuDesc$(m, i - 1) = "Displays keyword index page"
-        menu$(m, i) = "#Keywords by Usage": i = i + 1
+        menu$(m, i) = "#Keywords By Usage": i = i + 1
         menuDesc$(m, i - 1) = "Displays keywords index by usage"
         if 1=0 then ' removing the "View on Wiki" - @dualbrain
           menu$(m, i) = "-": i = i + 1
@@ -5313,7 +5313,7 @@ FUNCTION ide2 (ignore)
                 lnk$ = "Keyword Reference - Alphabetical"
                 GOTO OpenHelpLnk
             END IF
-            IF menu$(m, s) = "#Keywords by Usage" THEN
+            IF menu$(m, s) = "#Keywords By Usage" THEN
                 PCOPY 3, 0: SCREEN , , 3, 0
                 lnk$ = "Keyword Reference - By usage"
                 GOTO OpenHelpLnk
@@ -6526,9 +6526,12 @@ HelpAreaShowBackLinks:
             END IF
         NEXT
     ELSE 
-        'TODO: Need to show the "HELP: {document name}" instead of "breadcrumb".
+        COLOR 7, 0
+        FOR lineCol = 2 TO idewx - 6
+            LOCATE idewy, lineCol: PRINT CHR$(196);
+        NEXT
         COLOR 0, 7
-        Document_Title$ = "QB64 Help Index" ' For now, hardcoded to test layout.
+        Document_Title$ = Back$(Help_Back_Pos)
         LOCATE idewy, (idewx - (LEN(Document_Title$) + 8)) \ 2 : PRINT " HELP: " + Document_Title$ + " "
     END IF
     IF 1=0 THEN ' removing the "View on Wiki" - @dualbrain
@@ -18446,7 +18449,7 @@ SUB IdeMakeContextualMenu
             menuDesc$(m, i - 1) = "Displays help contents page"
             menu$(m, i) = "Keyword #Index": i = i + 1
             menuDesc$(m, i - 1) = "Displays keyword index page"
-            menu$(m, i) = "#Keywords by Usage": i = i + 1
+            menu$(m, i) = "#Keywords By Usage": i = i + 1
             menuDesc$(m, i - 1) = "Displays keywords index by usage"
             if 1=0 then ' removing the "View on Wiki" - @dualbrain
               menu$(m, i) = "-": i = i + 1
