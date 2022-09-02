@@ -1,6 +1,6 @@
 FUNCTION Back2BackName$ (a$)
-    IF a$ = "Keyword Reference (Alphabetical)" THEN Back2BackName$ = "Alphabetical": EXIT FUNCTION
-    IF a$ = "Keyword Reference (Usage)" THEN Back2BackName$ = "By Usage": EXIT FUNCTION
+    IF a$ = "Keyword Reference - Alphabetical" THEN Back2BackName$ = "Alphabetical": EXIT FUNCTION
+    IF a$ = "Keyword Reference - By Usage" THEN Back2BackName$ = "By Usage": EXIT FUNCTION
     IF a$ = "QB64 Help Menu" THEN Back2BackName$ = "Help": EXIT FUNCTION
     IF a$ = "QB64 FAQ" THEN Back2BackName$ = "FAQ": EXIT FUNCTION
     Back2BackName$ = a$
@@ -29,20 +29,22 @@ FUNCTION Wiki$ (PageName$)
     DO WHILE INSTR(PageName2$, " ")
         ASC(PageName2$, INSTR(PageName2$, " ")) = 45 '95
     LOOP
-    DO WHILE INSTR(PageName2$, "&")
-        i = INSTR(PageName2$, "&")
-        PageName2$ = LEFT$(PageName2$, i - 1) + "%26" + RIGHT$(PageName2$, LEN(PageName2$) - i)
-    LOOP
+    'DO WHILE INSTR(PageName2$, "&")
+    '    i = INSTR(PageName2$, "&")
+    '    PageName2$ = LEFT$(PageName2$, i - 1) + "%26" + RIGHT$(PageName2$, LEN(PageName2$) - i)
+    'LOOP
     DO WHILE INSTR(PageName2$, "/")
         i = INSTR(PageName2$, "/")
-        PageName2$ = LEFT$(PageName2$, i - 1) + "%2F" + RIGHT$(PageName2$, LEN(PageName2$) - i)
+        'PageName2$ = LEFT$(PageName2$, i - 1) + "%2F" + RIGHT$(PageName2$, LEN(PageName2$) - i)
+        PageName2$ = LEFT$(PageName2$, i - 1) + "-" + RIGHT$(PageName2$, LEN(PageName2$) - i)
     LOOP
 
     'Is this page in the cache?
     IF Help_IgnoreCache = 0 THEN
-        IF _FILEEXISTS(Cache_Folder$ + "/" + PageName2$ + ".txt") THEN
+    
+        IF _FILEEXISTS(Cache_Folder$ + "/" + PageName2$ + ".md") THEN
             fh = FREEFILE
-            OPEN Cache_Folder$ + "/" + PageName2$ + ".txt" FOR BINARY AS #fh
+            OPEN Cache_Folder$ + "/" + PageName2$ + ".md" FOR BINARY AS #fh
             a$ = SPACE$(LOF(fh))
             GET #fh, , a$
             CLOSE #fh
@@ -55,8 +57,8 @@ FUNCTION Wiki$ (PageName$)
             LOOP
             IF removedchr13 THEN
                 fh = FREEFILE
-                OPEN Cache_Folder$ + "/" + PageName2$ + ".txt" FOR OUTPUT AS #fh: CLOSE #fh
-                OPEN Cache_Folder$ + "/" + PageName2$ + ".txt" FOR BINARY AS #fh
+                OPEN Cache_Folder$ + "/" + PageName2$ + ".md" FOR OUTPUT AS #fh: CLOSE #fh
+                OPEN Cache_Folder$ + "/" + PageName2$ + ".md" FOR BINARY AS #fh
                 PUT #fh, 1, a$
                 CLOSE #fh
             END IF
@@ -900,7 +902,7 @@ SUB WikiParse (a$)
     'PRINT "Finished parsing!": _DISPLAY
 
 
-    IF Help_PageLoaded$ = "Keyword Reference (Alphabetical)" THEN
+    IF Help_PageLoaded$ = "Keyword Reference - Alphabetical" THEN
 
         fh = FREEFILE
         OPEN "internal\help\links.bin" FOR OUTPUT AS #fh
