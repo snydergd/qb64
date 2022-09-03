@@ -76,6 +76,12 @@ DIM SHARED QB64_uptime!
 
 QB64_uptime! = TIMER
 
+DIM SHARED debugPath$
+debugPath$ = _CWD$
+IF _FILEEXISTS(debugPath$ + "/qb64.log") THEN
+  KILL debugPath$ + "/qb64.log"
+END IF
+
 NoInternalFolder:
 IF _DIREXISTS("internal") = 0 THEN
     _SCREENSHOW
@@ -106,8 +112,6 @@ CONST DEPENDENCY_ICON = 10: DEPENDENCY_LAST = DEPENDENCY_LAST + 1
 CONST DEPENDENCY_SCREENIMAGE = 11: DEPENDENCY_LAST = DEPENDENCY_LAST + 1
 CONST DEPENDENCY_DEVICEINPUT = 12: DEPENDENCY_LAST = DEPENDENCY_LAST + 1 'removes support for gamepad input if not present
 CONST DEPENDENCY_ZLIB = 13: DEPENDENCY_LAST = DEPENDENCY_LAST + 1 'ZLIB library linkage, if desired, for compression/decompression.
-
-
 
 DIM SHARED DEPENDENCY(1 TO DEPENDENCY_LAST)
 
@@ -379,6 +383,12 @@ DIM SHARED compilelog$
 '$INCLUDE:'global\IDEsettings.bas'
 
 CMDLineFile = ParseCMDLineArgs$
+IF CMDLineFile <> "" AND FileHasExtension(CMDLineFile) = 0 THEN
+    CMDLineFile = CMDLineFile + ".BAS"
+END IF
+IF CMDLineFile <> "" AND _FILEEXISTS(_STARTDIR$ + "/" + CMDLineFile) THEN
+    CMDLineFile = _STARTDIR$ + "/" + CMDLineFile
+END IF
 
 IF ConsoleMode THEN
     _DEST _CONSOLE
@@ -26309,4 +26319,9 @@ DEFLNG A-Z
 '-------- Optional IDE Component (2/2) --------
 '$INCLUDE:'ide\ide_methods.bas'
 
-
+SUB DebugPrint(text$)
+  fn = FREEFILE
+  OPEN debugPath$ + "/qb64.log" FOR APPEND AS #fn
+  PRINT #fn, text$
+  CLOSE #fn
+END SUB
