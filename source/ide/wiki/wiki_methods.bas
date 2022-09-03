@@ -87,7 +87,7 @@ FUNCTION Wiki$ (PageName$)
 
     
     url$ = CHR$(34) + wikiBaseAddress$ + "/" + PageName2$ + ".md" + CHR$(34)
-    outputFile$ = Cache_Folder$ + "/" + PageName2$ + ".txt"
+    outputFile$ = Cache_Folder$ + "/" + PageName2$ + ".md"
 
     SHELL _HIDE "curl -L -o " + CHR$(34) + outputFile$ + CHR$(34) + " " + url$
     fh = FREEFILE
@@ -183,34 +183,34 @@ SUB Help_NewLine
 
 END SUB
 
-SUB Help_PreView
+' SUB Help_PreView ' Does not appear to be in use.
 
-    OPEN "help_preview.txt" FOR OUTPUT AS #1
-    FOR i = 1 TO LEN(Help_Txt$) STEP 4
-        c = ASC(Help_Txt$, i)
-        c$ = CHR$(c)
-        IF c = 13 THEN c$ = CHR$(13) + CHR$(10)
-        PRINT #1, c$;
-    NEXT
-    CLOSE #1
+'     OPEN "help_preview.txt" FOR OUTPUT AS #1
+'     FOR i = 1 TO LEN(Help_Txt$) STEP 4
+'         c = ASC(Help_Txt$, i)
+'         c$ = CHR$(c)
+'         IF c = 13 THEN c$ = CHR$(13) + CHR$(10)
+'         PRINT #1, c$;
+'     NEXT
+'     CLOSE #1
 
-    CLS
-    FOR i = 1 TO LEN(Help_Txt$) STEP 4
-        c = ASC(Help_Txt$, i)
-        col = ASC(Help_Txt$, i + 1)
-        IF c = 13 THEN
-            COLOR col AND 15, col \ 16
-            PRINT SPACE$(help_w - POS(0));
-            COLOR 7, 0
-            PRINT SPACE$(_WIDTH - POS(0) + 1);
-            COLOR col AND 15, col \ 16
-            SLEEP
-        ELSE
-            COLOR col AND 15, col \ 16
-            PRINT CHR$(c);
-        END IF
-    NEXT
-END SUB
+'     CLS
+'     FOR i = 1 TO LEN(Help_Txt$) STEP 4
+'         c = ASC(Help_Txt$, i)
+'         col = ASC(Help_Txt$, i + 1)
+'         IF c = 13 THEN
+'             COLOR col AND 15, col \ 16
+'             PRINT SPACE$(help_w - POS(0));
+'             COLOR 7, 0
+'             PRINT SPACE$(_WIDTH - POS(0) + 1);
+'             COLOR col AND 15, col \ 16
+'             SLEEP
+'         ELSE
+'             COLOR col AND 15, col \ 16
+'             PRINT CHR$(c);
+'         END IF
+'     NEXT
+' END SUB
 
 
 FUNCTION Help_Col 'helps to calculate the default color

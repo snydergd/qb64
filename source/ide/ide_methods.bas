@@ -5315,7 +5315,7 @@ FUNCTION ide2 (ignore)
             END IF
             IF menu$(m, s) = "#Keywords By Usage" THEN
                 PCOPY 3, 0: SCREEN , , 3, 0
-                lnk$ = "Keyword Reference - By usage"
+                lnk$ = "Keyword Reference - By Usage"
                 GOTO OpenHelpLnk
             END IF
 
