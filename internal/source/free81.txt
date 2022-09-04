@@ -1,4 +1,5 @@
-if(oldstr3653){
-if(oldstr3653->fixed)qbs_set(oldstr3653,_FUNC_QUOTEDFILENAME_STRING_F);
-qbs_free(_FUNC_QUOTEDFILENAME_STRING_F);
+if(oldstr3643){
+if(oldstr3643->fixed)qbs_set(oldstr3643,_FUNC_HASHFINDREV_STRING_A);
+qbs_free(_FUNC_HASHFINDREV_STRING_A);
 }
+qbs_free(_FUNC_HASHFINDREV_STRING_UA);
