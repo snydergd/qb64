@@ -1,5 +1,4 @@
-if(oldstr5291){
-if(oldstr5291->fixed)qbs_set(oldstr5291,_FUNC_IDEFILEEXISTS_STRING_F);
-qbs_free(_FUNC_IDEFILEEXISTS_STRING_F);
+if(oldstr5238){
+if(oldstr5238->fixed)qbs_set(oldstr5238,_SUB_FINDQUOTECOMMENT_STRING_TEXT);
+qbs_free(_SUB_FINDQUOTECOMMENT_STRING_TEXT);
 }
-qbs_free(_FUNC_IDEFILEEXISTS_STRING_M);

@@ -1,5 +1,4 @@
-if(oldstr6310){
-if(oldstr6310->fixed)qbs_set(oldstr6310,_SUB_INSERTATCURSOR_STRING_TEMPK);
-qbs_free(_SUB_INSERTATCURSOR_STRING_TEMPK);
+if(oldstr6293){
+if(oldstr6293->fixed)qbs_set(oldstr6293,_FUNC_REMOVESYMBOL2_STRING_VARNAME);
+qbs_free(_FUNC_REMOVESYMBOL2_STRING_VARNAME);
 }
-qbs_free(_SUB_INSERTATCURSOR_STRING_A);

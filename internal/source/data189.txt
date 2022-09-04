@@ -1,30 +1,29 @@
-qbs *_FUNC_IDEZGETFILEPATH_STRING_IDEZGETFILEPATH=NULL;
-if (!_FUNC_IDEZGETFILEPATH_STRING_IDEZGETFILEPATH)_FUNC_IDEZGETFILEPATH_STRING_IDEZGETFILEPATH=qbs_new(0,0);
-qbs*oldstr5744=NULL;
-if(_FUNC_IDEZGETFILEPATH_STRING_ROOT->tmp||_FUNC_IDEZGETFILEPATH_STRING_ROOT->fixed||_FUNC_IDEZGETFILEPATH_STRING_ROOT->readonly){
-oldstr5744=_FUNC_IDEZGETFILEPATH_STRING_ROOT;
-if (oldstr5744->cmem_descriptor){
-_FUNC_IDEZGETFILEPATH_STRING_ROOT=qbs_new_cmem(oldstr5744->len,0);
-}else{
-_FUNC_IDEZGETFILEPATH_STRING_ROOT=qbs_new(oldstr5744->len,0);
+int32 *_FUNC_IDEVBAR_LONG_IDEVBAR=NULL;
+if(_FUNC_IDEVBAR_LONG_IDEVBAR==NULL){
+_FUNC_IDEVBAR_LONG_IDEVBAR=(int32*)mem_static_malloc(4);
+*_FUNC_IDEVBAR_LONG_IDEVBAR=0;
 }
-memcpy(_FUNC_IDEZGETFILEPATH_STRING_ROOT->chr,oldstr5744->chr,oldstr5744->len);
+int32 *_FUNC_IDEVBAR_LONG_I=NULL;
+if(_FUNC_IDEVBAR_LONG_I==NULL){
+_FUNC_IDEVBAR_LONG_I=(int32*)mem_static_malloc(4);
+*_FUNC_IDEVBAR_LONG_I=0;
 }
-qbs*oldstr5745=NULL;
-if(_FUNC_IDEZGETFILEPATH_STRING_F->tmp||_FUNC_IDEZGETFILEPATH_STRING_F->fixed||_FUNC_IDEZGETFILEPATH_STRING_F->readonly){
-oldstr5745=_FUNC_IDEZGETFILEPATH_STRING_F;
-if (oldstr5745->cmem_descriptor){
-_FUNC_IDEZGETFILEPATH_STRING_F=qbs_new_cmem(oldstr5745->len,0);
-}else{
-_FUNC_IDEZGETFILEPATH_STRING_F=qbs_new(oldstr5745->len,0);
+int32 *_FUNC_IDEVBAR_LONG_N=NULL;
+if(_FUNC_IDEVBAR_LONG_N==NULL){
+_FUNC_IDEVBAR_LONG_N=(int32*)mem_static_malloc(4);
+*_FUNC_IDEVBAR_LONG_N=0;
 }
-memcpy(_FUNC_IDEZGETFILEPATH_STRING_F->chr,oldstr5745->chr,oldstr5745->len);
+int32 *_FUNC_IDEVBAR_LONG_Y2=NULL;
+if(_FUNC_IDEVBAR_LONG_Y2==NULL){
+_FUNC_IDEVBAR_LONG_Y2=(int32*)mem_static_malloc(4);
+*_FUNC_IDEVBAR_LONG_Y2=0;
 }
-qbs *_FUNC_IDEZGETFILEPATH_STRING_P=NULL;
-if (!_FUNC_IDEZGETFILEPATH_STRING_P)_FUNC_IDEZGETFILEPATH_STRING_P=qbs_new(0,0);
-byte_element_struct *byte_element_5746=NULL;
-if (!byte_element_5746){
-if ((mem_static_pointer+=12)<mem_static_limit) byte_element_5746=(byte_element_struct*)(mem_static_pointer-12); else byte_element_5746=(byte_element_struct*)mem_static_malloc(12);
+int64 fornext_value5707;
+int64 fornext_finalvalue5707;
+int64 fornext_step5707;
+uint8 fornext_step_negative5707;
+float *_FUNC_IDEVBAR_SINGLE_P=NULL;
+if(_FUNC_IDEVBAR_SINGLE_P==NULL){
+_FUNC_IDEVBAR_SINGLE_P=(float*)mem_static_malloc(4);
+*_FUNC_IDEVBAR_SINGLE_P=0;
 }
-qbs *_FUNC_IDEZGETFILEPATH_STRING_P2=NULL;
-if (!_FUNC_IDEZGETFILEPATH_STRING_P2)_FUNC_IDEZGETFILEPATH_STRING_P2=qbs_new(0,0);

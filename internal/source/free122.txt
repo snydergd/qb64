@@ -1,5 +1,4 @@
-if(oldstr3885){
-if(oldstr3885->fixed)qbs_set(oldstr3885,_FUNC_INIFORMATSECTION_STRING___SECTION);
-qbs_free(_FUNC_INIFORMATSECTION_STRING___SECTION);
+if(oldstr3829){
+if(oldstr3829->fixed)qbs_set(oldstr3829,_SUB_PATH_SLASH_CORRECT_STRING_A);
+qbs_free(_SUB_PATH_SLASH_CORRECT_STRING_A);
 }
-qbs_free(_FUNC_INIFORMATSECTION_STRING_SECTION);

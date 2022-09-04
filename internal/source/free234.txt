@@ -1,4 +1,0 @@
-if(oldstr6289){
-if(oldstr6289->fixed)qbs_set(oldstr6289,_SUB_SETSTATUSMESSAGE_STRING_TEXT);
-qbs_free(_SUB_SETSTATUSMESSAGE_STRING_TEXT);
-}
