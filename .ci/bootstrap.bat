@@ -1,11 +1,46 @@
 @ECHO OFF
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
-cd internal\c
-set MINGW=mingw32
-IF "%PLATFORM%"=="x64" set MINGW=mingw64
-ren %MINGW% c_compiler
-cd ../..
+rem cd internal\c
+rem set MINGW=mingw32
+rem IF "%PLATFORM%"=="x64" set MINGW=mingw64
+rem ren %MINGW% c_compiler
+rem cd ../..
+
+rem Check if the C++ compiler is there and skip downloading if it exists
+if exist internal\c\c_compiler\bin\c++.exe goto skipccompsetup
+
+rem Create the c_compiler directory that should contain the mingw binaries
+mkdir internal\c\c_compiler
+
+rem Check the processor type and then set the MINGW variable to correct mingw filename
+reg Query "HKLM\Hardware\Description\System\CentralProcessor\0" | find /i "x86" > NUL && set MINGW=mingw32 || set MINGW=mingw64
+
+rem Set the correct file to download based on processor type
+if "%MINGW%"=="mingw64" (
+	set url="https://github.com/niXman/mingw-builds-binaries/releases/download/12.1.0-rt_v10-rev3/x86_64-12.1.0-release-win32-seh-rt_v10-rev3.7z"
+) else (
+	set url="https://github.com/niXman/mingw-builds-binaries/releases/download/12.1.0-rt_v10-rev3/i686-12.1.0-release-win32-sjlj-rt_v10-rev3.7z"
+)
+
+echo Downloading %url%...
+curl -L %url% -o temp.7z
+
+echo Downloading 7zr.exe...
+curl -L https://www.7-zip.org/a/7zr.exe -o 7zr.exe
+
+echo Extracting C++ Compiler...
+7zr.exe x temp.7z -y
+
+echo Moving C++ compiler...
+for /f %%a in ('dir %MINGW% /b') do move /y "%MINGW%\%%a" internal\c\c_compiler\
+
+echo Cleaning up..
+rd %MINGW%
+del 7zr.exe
+del temp.7z
+
+:skipccompsetup
 
 echo Building library 'LibQB'
 cd internal\c\libqb\os\win
