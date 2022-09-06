@@ -18,6 +18,9 @@ jobs:
       run: .ci/bootstrap.sh lnx
     - name: Compile
       run: .ci/compile.sh
+    - name: Publish
+      if: github.event_name == 'push'
+      run: .ci/deploy.sh lnx
 
   macos-build:
     runs-on: macos-latest
@@ -28,6 +31,9 @@ jobs:
       run: .ci/bootstrap.sh osx
     - name: Compile
       run: .ci/compile.sh
+    - name: Publish
+      if: github.event_name == 'push'
+      run: .ci/deploy.sh osx
 
   windows-x86-build:
     runs-on: windows-latest
@@ -40,6 +46,9 @@ jobs:
       run: .ci/bootstrap.bat
     - name: Compile
       run: .ci/compile.bat
+    - name: Publish
+      if: github.event_name == 'push'
+      run: .ci/deploy.ps1
 
   windows-x64-build:
     runs-on: windows-latest
@@ -52,3 +61,6 @@ jobs:
       run: .ci/bootstrap.bat
     - name: Compile
       run: .ci/compile.bat
+    - name: Publish
+      if: github.event_name == 'push'
+      run: .ci/deploy.ps1

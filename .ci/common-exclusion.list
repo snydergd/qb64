@@ -1,4 +1,5 @@
 .ci
+.vscode
 .travis
 .travis.yml
 appveyor.yml
