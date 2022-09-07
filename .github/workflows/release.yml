@@ -72,12 +72,3 @@ jobs:
         path: |
           qb64/
           qb64_development_win-x64*.7z
-    - name: Release
-      if: startsWith(github.ref, 'refs/tags/v')
-      uses: softprops/action-gh-release@v1
-      with:
-        draft: true
-        files: |
-          qb64_development_win-x64*.7z
-        env:
-          GITHUB_TOKEN: $({ secrets.GITHUB_TOKEN })
