@@ -70,5 +70,4 @@ jobs:
       with: 
         name: upload winx64
         path: |
-          qb64/
           qb64_development_win-x64*.7z
