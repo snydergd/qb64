@@ -64,3 +64,20 @@ jobs:
     - name: Publish
       if: github.event_name == 'push'
       run: .ci/deploy.ps1
+    - name: Upload
+      uses: actions/upload-artifact@v3
+      if: always()
+      with: 
+        name: upload winx64
+        path: |
+          qb64/
+          qb64_development_win-x64*.7z
+    - name: Release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v1
+      with:
+        draft: true
+        files: |
+          qb64_development_win-x64*.7z
+        env:
+          GITHUB_TOKEN: $({ secrets.GITHUB_TOKEN })
