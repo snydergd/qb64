@@ -25,7 +25,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with: 
         name: upload linux ${{ github.run_number }}
-        path: ${{ github.workspace }}/qb64_*.tar.gz
+        path: ${{ github.workspace }}/../../qb64_*.tar.gz
 
   # macos-build:
   #   runs-on: macos-latest
