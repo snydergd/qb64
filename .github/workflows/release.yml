@@ -43,7 +43,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with: 
         name: upload macos ${{ github.run_number }}
-        path: /home/runner/work/qb64/qb64_*.tar.gz
+        path: /Users/runner/work/qb64/qb64_*.tar.gz
 
   windows-x86-build:
     runs-on: windows-latest
@@ -64,7 +64,9 @@ jobs:
       if: always()
       with: 
         name: upload winx86 ${{ github.run_number }}
-        path: ${{ github.workspace }}\qb64_*.7z
+        path: D:\a\qb64\qb64_*.7z
+
+# path: ${{ github.workspace }}\qb64_*.7z
 
   windows-x64-build:
     runs-on: windows-latest
@@ -84,4 +86,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with: 
         name: upload winx64 ${{ github.run_number }}
-        path: ${{ github.workspace }}\qb64_*.7z
+        path: D:\a\qb64\qb64_*.7z
