@@ -26,7 +26,7 @@ jobs:
       if: always()
       with: 
         name: upload linux
-        path: qb64_development_*.tar.gz
+        path: *.tar.gz
 
   macos-build:
     runs-on: macos-latest
@@ -45,7 +45,7 @@ jobs:
       if: always()
       with: 
         name: upload macos
-        path: qb64_development_*.tar.gz
+        path: *.tar.gz
 
   windows-x86-build:
     runs-on: windows-latest
@@ -66,7 +66,7 @@ jobs:
       if: always()
       with: 
         name: upload winx86
-        path: qb64_development_*.7z
+        path: *.7z
 
   windows-x64-build:
     runs-on: windows-latest
@@ -84,7 +84,6 @@ jobs:
       run: .ci/deploy.ps1
     - name: Upload
       uses: actions/upload-artifact@v3
-      if: always()
       with: 
         name: upload winx64
-        path: qb64_development_*.7z
+        path: *.7z
