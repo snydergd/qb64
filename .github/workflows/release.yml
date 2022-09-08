@@ -21,6 +21,12 @@ jobs:
     - name: Publish
       if: github.event_name == 'push'
       run: .ci/deploy.sh lnx
+    - name: Upload
+      uses: actions/upload-artifact@v3
+      if: always()
+      with: 
+        name: upload linux
+        path: qb64_development_*.tar.gz
 
   macos-build:
     runs-on: macos-latest
@@ -34,6 +40,12 @@ jobs:
     - name: Publish
       if: github.event_name == 'push'
       run: .ci/deploy.sh osx
+    - name: Upload
+      uses: actions/upload-artifact@v3
+      if: always()
+      with: 
+        name: upload macos
+        path: qb64_development_*.tar.gz
 
   windows-x86-build:
     runs-on: windows-latest
@@ -49,6 +61,12 @@ jobs:
     - name: Publish
       if: github.event_name == 'push'
       run: .ci/deploy.ps1
+    - name: Upload
+      uses: actions/upload-artifact@v3
+      if: always()
+      with: 
+        name: upload winx86
+        path: qb64_development_*.7z
 
   windows-x64-build:
     runs-on: windows-latest
@@ -69,5 +87,4 @@ jobs:
       if: always()
       with: 
         name: upload winx64
-        path: |
-          qb64_development_win-x64*.7z
+        path: qb64_development_*.7z
