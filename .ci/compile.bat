@@ -1,4 +1,8 @@
 @ECHO OFF
+
+if not exist .ci (cd ..)
+if not exist .ci exit /b 1
+
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
 if defined GITHUB_SHA (echo From git %GITHUB_SHA:~0,7% > internal\version.txt)

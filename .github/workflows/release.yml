@@ -24,7 +24,7 @@ jobs:
     - name: Upload
       uses: actions/upload-artifact@v3
       with: 
-        name: upload linux ${{ github.run_number }}
+        name: qb64_${{ github.ref_name }}_${{ github.sha }}_lnx
         path: /home/runner/work/qb64/qb64_*.tar.gz
 
   macos-build:
@@ -42,7 +42,7 @@ jobs:
     - name: Upload
       uses: actions/upload-artifact@v3
       with: 
-        name: upload macos ${{ github.run_number }}
+        name: qb64_${{ github.ref_name }}_${{ github.sha }}_osx
         path: /Users/runner/work/qb64/qb64_*.tar.gz
 
   windows-x86-build:
@@ -53,7 +53,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Bootstrap compiler
-      run: .ci/bootstrap.bat
+      run: .ci/bootstrap32.bat
     - name: Compile
       run: .ci/compile.bat
     - name: Publish
@@ -63,10 +63,8 @@ jobs:
       uses: actions/upload-artifact@v3
       if: always()
       with: 
-        name: upload winx86 ${{ github.run_number }}
+        name: qb64_${{ github.ref_name }}_${{ github.sha }}_win-x86
         path: D:\a\qb64\qb64_*.7z
-
-# path: ${{ github.workspace }}\qb64_*.7z
 
   windows-x64-build:
     runs-on: windows-latest
@@ -85,5 +83,8 @@ jobs:
     - name: Upload
       uses: actions/upload-artifact@v3
       with: 
-        name: upload winx64 ${{ github.run_number }}
+        name: qb64_${{ github.ref_name }}_${{ github.sha }}_win-x64
         path: D:\a\qb64\qb64_*.7z
+
+# ${{ github.event.repository.updated_at }}
+# path: ${{ github.workspace }}\qb64_*.7z

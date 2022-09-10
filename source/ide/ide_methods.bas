@@ -5207,8 +5207,12 @@ FUNCTION ide2 (ignore)
             IF menu$(m, s) = "#About..." THEN
                 helpabout:
                 PCOPY 2, 0
-                m$ = "QB64 Version " + Version$ + CHR$(10) + DevChannel$
-                IF LEN(AutoBuildMsg$) THEN m$ = m$ + CHR$(10) + AutoBuildMsg$
+                m$ = "QB64 Version " + Version$ '+ CHR$(10) + DevChannel$
+                IF LEN(AutoBuildMsg$) THEN 
+                    m$ = m$ + CHR$(10) + AutoBuildMsg$
+                ELSE
+                    m$ = m$ + CHR$(10) + DevChannel$
+                 END IF
                 result = idemessagebox("About", m$, "")
                 PCOPY 3, 0: SCREEN , , 3, 0
                 GOTO ideloop

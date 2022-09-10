@@ -1,3 +1,8 @@
+@ECHO OFF
+
+if not exist .ci (cd ..)
+if not exist .ci exit /b 1
+
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
 echo Compiling new QB64

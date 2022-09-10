@@ -6,6 +6,9 @@ appveyor.yml
 .git
 .gitignore
 .github
+build.bat
+findcurl.cmd
+reset.cmd
 setup_win.bat
 internal/c/mingw32
 internal/c/mingw64
