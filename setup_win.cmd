@@ -38,18 +38,38 @@ del /q /s internal\temp\*.* >nul 2>nul
 rem Check if the C++ compiler is there and skip downloading if it exists
 if exist internal\c\c_compiler\bin\c++.exe goto skipccompsetup
 
-rem Create the c_compiler directory that should contain the mingw binaries
+rem Create the c_compiler directory that should contain the MINGW binaries
 mkdir internal\c\c_compiler
 
-rem Check the processor type and then set the MINGW variable to correct mingw filename
-reg Query "HKLM\Hardware\Description\System\CentralProcessor\0" | find /i "x86" > NUL && set MINGW=mingw32 || set MINGW=mingw64
+rem Check the processor type and then set the MINGW variable to correct MINGW filename
 
-rem Set the correct file to download based on processor type
-if "%MINGW%"=="mingw64" (
-	set url="https://github.com/niXman/mingw-builds-binaries/releases/download/12.2.0-rt_v10-rev0/x86_64-12.2.0-release-win32-seh-rt_v10-rev0.7z"
-) else (
-	set url="https://github.com/niXman/mingw-builds-binaries/releases/download/12.2.0-rt_v10-rev0/i686-12.2.0-release-win32-sjlj-rt_v10-rev0.7z"
-)
+rem reg Query "HKLM\Hardware\Description\System\CentralProcessor\0" | find /i "x86" > NUL && set MINGW=mingw32 || set MINGW=mingw64
+rem 
+rem rem Set the correct file to download based on processor type
+rem if "%MINGW%"=="mingw64" (
+rem 	set url="https://github.com/niXman/mingw-builds-binaries/releases/download/12.2.0-rt_v10-rev0/x86_64-12.2.0-release-win32-seh-rt_v10-rev0.7z"
+rem ) else (
+rem 	set url="https://github.com/niXman/mingw-builds-binaries/releases/download/12.2.0-rt_v10-rev0/i686-12.2.0-release-win32-sjlj-rt_v10-rev0.7z"
+rem )
+
+reg Query "HKLM\Hardware\Description\System\CentralProcessor\0" | find /i "x86" > NUL && goto chose32 || goto choose
+
+:choose
+choice /c 12 /M "Use (1) 64-bit or (2) 32-bit MINGW? "
+if errlevel == 1 goto chose64
+goto chose32
+
+:chose32
+set url="https://github.com/niXman/mingw-builds-binaries/releases/download/12.2.0-rt_v10-rev0/i686-12.2.0-release-win32-sjlj-rt_v10-rev0.7z"
+set MINGW=mingw32
+goto chosen
+
+:chose64
+set url="https://github.com/niXman/mingw-builds-binaries/releases/download/12.2.0-rt_v10-rev0/x86_64-12.2.0-release-win32-seh-rt_v10-rev0.7z"
+set MINGW=mingw64
+goto chosen
+
+:chosen
 
 echo Downloading %url%...
 curl -L %url% -o temp.7z
