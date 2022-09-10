@@ -56,7 +56,7 @@ reg Query "HKLM\Hardware\Description\System\CentralProcessor\0" | find /i "x86" 
 
 :choose
 choice /c 12 /M "Use (1) 64-bit or (2) 32-bit MINGW? "
-if errlevel == 1 goto chose64
+if errorlevel == 1 goto chose64
 goto chose32
 
 :chose32
