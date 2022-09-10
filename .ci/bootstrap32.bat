@@ -1,5 +1,8 @@
 @ECHO OFF
 
+if not exist .ci (cd ..)
+if not exist .ci exit /b 1
+
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
 rem Check if the C++ compiler is there and skip downloading if it exists

@@ -1,5 +1,8 @@
 @ECHO OFF
 
+if not exist .ci (cd ..)
+if not exist .ci exit /b 1
+
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
 rem Check if the C++ compiler is there and skip downloading if it exists
@@ -12,6 +15,7 @@ rem Check the processor type and then set the MINGW variable to correct mingw fi
 rem reg Query "HKLM\Hardware\Description\System\CentralProcessor\0" | find /i "x86" > NUL && set MINGW=mingw32 || 
 
 set MINGW=mingw64
+
 rem Set the correct file to download based on processor type
 rem if "%MINGW%"=="mingw64" (
 	set url="https://github.com/niXman/mingw-builds-binaries/releases/download/12.2.0-rt_v10-rev0/x86_64-12.2.0-release-win32-seh-rt_v10-rev0.7z"
