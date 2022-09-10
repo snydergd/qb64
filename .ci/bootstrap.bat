@@ -9,14 +9,15 @@ rem Create the c_compiler directory that should contain the mingw binaries
 mkdir internal\c\c_compiler
 
 rem Check the processor type and then set the MINGW variable to correct mingw filename
-reg Query "HKLM\Hardware\Description\System\CentralProcessor\0" | find /i "x86" > NUL && set MINGW=mingw32 || set MINGW=mingw64
+rem reg Query "HKLM\Hardware\Description\System\CentralProcessor\0" | find /i "x86" > NUL && set MINGW=mingw32 || 
 
+set MINGW=mingw64
 rem Set the correct file to download based on processor type
-if "%MINGW%"=="mingw64" (
+rem if "%MINGW%"=="mingw64" (
 	set url="https://github.com/niXman/mingw-builds-binaries/releases/download/12.2.0-rt_v10-rev0/x86_64-12.2.0-release-win32-seh-rt_v10-rev0.7z"
-) else (
-	set url="https://github.com/niXman/mingw-builds-binaries/releases/download/12.2.0-rt_v10-rev0/i686-12.2.0-release-win32-sjlj-rt_v10-rev0.7z"
-)
+rem ) else (
+rem   set url="https://github.com/niXman/mingw-builds-binaries/releases/download/12.2.0-rt_v10-rev0/i686-12.2.0-release-win32-sjlj-rt_v10-rev0.7z"
+rem )
 
 echo Downloading %url%...
 curl -L %url% -o temp.7z
