@@ -18,9 +18,9 @@ reg Query "HKLM\Hardware\Description\System\CentralProcessor\0" | find /i "x86" 
 
 rem Set the correct file to download based on processor type
 if "%MINGW%"=="mingw64" (
-	set url="https://github.com/niXman/mingw-builds-binaries/releases/download/12.1.0-rt_v10-rev3/x86_64-12.1.0-release-win32-seh-rt_v10-rev3.7z"
+	set url="https://github.com/niXman/mingw-builds-binaries/releases/download/12.2.0-rt_v10-rev0/x86_64-12.2.0-release-win32-seh-rt_v10-rev0.7z"
 ) else (
-	set url="https://github.com/niXman/mingw-builds-binaries/releases/download/12.1.0-rt_v10-rev3/i686-12.1.0-release-win32-sjlj-rt_v10-rev3.7z"
+	set url="https://github.com/niXman/mingw-builds-binaries/releases/download/12.2.0-rt_v10-rev0/i686-12.2.0-release-win32-sjlj-rt_v10-rev0.7z"
 )
 
 echo Downloading %url%...
