@@ -2,5 +2,6 @@
     "makefile.extensionOutputFolder": "./.vscode",
     "files.associations": {
         "src.c": "cpp"
-    }
+    },
+    "editor.multiCursorModifier": "ctrlCmd"
 }
