@@ -6251,7 +6251,7 @@ FUNCTION ide2 (ignore)
                 GOSUB redrawItAll: GOTO ideloop
             END IF
 
-            IF menu$(m, s) = "#Save  Ctrl+S" THEN
+            IF menu$(m, s) = "#Save  Ctrl+S" THEN '"#Save  Ctrl+S" THEN
                 PCOPY 2, 0
                 IF ideprogname = "" THEN
                     ProposedTitle$ = FindProposedTitle$
@@ -18126,15 +18126,36 @@ END FUNCTION
 
 SUB IdeMakeFileMenu
     m = 1: i = 0
-    menu$(m, i) = "File": i = i + 1
-    menu$(m, i) = "#New  Ctrl+N": i = i + 1
-    menuDesc$(m, i - 1) = "Closes current program and starts a blank one"
-    menu$(m, i) = "#Open...  Ctrl+O": i = i + 1
-    menuDesc$(m, i - 1) = "Loads a program into memory"
-    menu$(m, i) = "#Save  Ctrl+S": i = i + 1
-    menuDesc$(m, i - 1) = "Writes current program to a file on disk"
-    menu$(m, i) = "Save #As...": i = i + 1
-    menuDesc$(m, i - 1) = "Saves current program with specified name"
+    IF 1=1 THEN
+        menu$(m, i) = "File": i = i + 1
+        menu$(m, i) = "#New  Ctrl+N": i = i + 1
+        menuDesc$(m, i - 1) = "Closes current program and starts a blank one"
+        menu$(m, i) = "#Open...  Ctrl+O": i = i + 1
+        menuDesc$(m, i - 1) = "Loads a program into memory"
+        menu$(m, i) = "#Save  Ctrl+S": i = i + 1
+        menuDesc$(m, i - 1) = "Writes current program to a file on disk"
+        menu$(m, i) = "Save #As...": i = i + 1
+        menuDesc$(m, i - 1) = "Saves current program with specified name"
+    ELSE
+        menu$(m, i) = "File": i = i + 1
+        menu$(m, i) = "#New Program  Ctrl+N": i = i + 1 '"#New  Ctrl+N"
+        menuDesc$(m, i - 1) = "Removes currently loaded program from memory"
+        menu$(m, i) = "#Open Program...  Ctrl+O": i = i + 1 '"#Open...  Ctrl+O"
+        menuDesc$(m, i - 1) = "Loads new program into memory"
+        menu$(m, i) = "~#Merge...": i = i + 1
+        menuDesc$(m, i - 1) = "Inserts specified file into current module"
+        menu$(m, i) = "#Save  Ctrl+S": i = i + 1 '"#Save  Ctrl+S"
+        menuDesc$(m, i - 1) = "Writes current module to file on disk"
+        menu$(m, i) = "Save #As...": i = i + 1
+        menuDesc$(m, i - 1) = "Saves current module with specified name and format"
+        menu$(m, i) = "~Sa#ve All": i = i + 1
+        menuDesc$(m, i - 1) = "Writes all currently loaded modules to files on disk"
+        menu$(m, i) = "-": i = i + 1
+        menu$(m, i) = "~#Print...": i = i + 1
+        menuDesc$(m, i - 1) = "Prints specified text or module"
+        menu$(m, i) = "~#DOS Shell...": i = i + 1
+        menuDesc$(m, i - 1) = "Invokes DOS shell"
+    END IF
     fh = FREEFILE
     OPEN ".\internal\temp\recent.bin" FOR BINARY AS #fh: a$ = SPACE$(LOF(fh)): GET #fh, , a$
     a$ = RIGHT$(a$, LEN(a$) - 2)
@@ -18167,6 +18188,7 @@ SUB IdeMakeFileMenu
     NEXT
     CLOSE #fh
     IF menu$(m, i - 1) <> "#Recent..." AND menu$(m, i - 1) <> "Save #As..." THEN
+        menu$(m, i) = "-": i = i + 1
         menu$(m, i) = "#Clear Recent...": i = i + 1
         menuDesc$(m, i - 1) = "Clears list of recently loaded files"
     ELSE
