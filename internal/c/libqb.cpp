@@ -9745,30 +9745,47 @@ uint32 getptcol_8bpp (const qbs *pt, int x, int y) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+//  MODIFIED BY:  The Joyful Programmer
+//         DATE:  11/6/2022
+//
+//  NOTE:  THIS sub_paint FUNCTION WOULD NOT PAINT A PATTERN IN SCREEN 9 IF A bordercol WAS NOT
+//         DEFINED IN CODE, LIKE "PAINT(100, 100), Tile$". SEE ADDITIONAL COMMENTS BELOW FOR
+//         FURTHER INFORMATION.
+
+
 void sub_paint(float x,float y,qbs *fillstr,uint32 bordercol,qbs *backgroundstr,int32 passed){
     if (new_error) return;
     
     //uses 2 buffers, a and b, and swaps between them for reading and creating
-    static uint32 a_n=0;
-    static uint16 *a_x=(uint16*)malloc(2*65536),*a_y=(uint16*)malloc(2*65536);
-    static uint8 *a_t=(uint8*)malloc(65536);
-    static uint32 b_n=0;
-    static uint16 *b_x=(uint16*)malloc(2*65536),*b_y=(uint16*)malloc(2*65536);
-    static uint8 *b_t=(uint8*)malloc(65536);
-    static uint8 *done=(uint8*)calloc(640*480,1);
-    static int32 ix,iy,i,t,x2,y2;
+    static uint32 a_n{0};
+    static uint16 *a_x{(uint16*) malloc(2*65536)};
+    static uint16 *a_y{(uint16*) malloc(2*65536)};
+    static uint8 *a_t{(uint8*) malloc(65536)};
+    static uint32 b_n{0};
+    static uint16 *b_x{(uint16*) malloc(2*65536)};
+    static uint16 *b_y{(uint16*) malloc(2*65536)};
+    static uint8 *b_t{(uint8*) malloc(65536)};
+    static uint8 *done{(uint8*) calloc(640*480,1)};
+    static int32 ix;
+    static int32 iy;
+    static int32 i;
+    static int32 t;
+    static int32 x2;
+    static int32 y2;
     static uint32 offset;
     static uint8 *cp;
     static uint16 *sp;
-    static int32 done_size=640*480;
+    static int32 done_size{640*480};
 
-    if (qbg_text_only){error(5); return;}
-    if ((passed&2)==0){error(5); return;}//must be called with this parameter!
-    
-    if (fillstr->len==0){error(5); return;}
+    if (qbg_text_only) {error(5); return;}
+    if ((passed&2) == 0) {error(5); return;} //must be called with this parameter!
+    if (fillstr->len == 0) {error(5); return;}
 
     static uint8 tile[8][64];
-    static int32 sx,sy;
+    static int32 sx;
+    static int32 sy;
+    
     void (*getptsize)(const qbs *pt, int32 *sx, int32 *sy) = getptsize_4bpp;
     uint32 (*getptcol)(const qbs *pt, int32 x, int32 y) = getptcol_4bpp;
 
@@ -9795,128 +9812,262 @@ void sub_paint(float x,float y,qbs *fillstr,uint32 bordercol,qbs *backgroundstr,
     }
 
     getptsize(fillstr, &sx, &sy);
-    for(int x=0; x<sx; ++x)
-        for(int y=0; y<sy; ++y)
-            tile[x][y] = getptcol(fillstr, x,y);
+    for(int x = 0; x < sx; ++x)
+        for(int y = 0; y < sy; ++y)
+            tile[x][y] = getptcol(fillstr, x, y);
 
-    bordercol&=write_page->mask;
+    bordercol &= write_page->mask;
     
-    if (passed&1){write_page->x+=x; write_page->y+=y;}else{write_page->x=x; write_page->y=y;}
+    if (passed & 1) {
+        write_page->x += x;
+        write_page->y += y;
+    } else {
+        write_page->x = x;
+        write_page->y = y;
+    }
     
-    if (write_page->clipping_or_scaling){
-        if (write_page->clipping_or_scaling==2){
-            ix=qbr_float_to_long(write_page->x*write_page->scaling_x+write_page->scaling_offset_x)+write_page->view_offset_x;
-            iy=qbr_float_to_long(write_page->y*write_page->scaling_y+write_page->scaling_offset_y)+write_page->view_offset_y;
-            }else{
-            ix=qbr_float_to_long(write_page->x)+write_page->view_offset_x; iy=qbr_float_to_long(write_page->y)+write_page->view_offset_y;
+    if (write_page->clipping_or_scaling) {
+        if (write_page->clipping_or_scaling == 2) {
+            ix = qbr_float_to_long(write_page->x *
+                                   write_page->scaling_x +
+                                   write_page->scaling_offset_x) +
+                                   write_page->view_offset_x;
+            iy = qbr_float_to_long(write_page->y *
+                                   write_page->scaling_y + 
+                                   write_page->scaling_offset_y) + 
+                                   write_page->view_offset_y;
+        } else {
+            ix=qbr_float_to_long(write_page->x) + write_page->view_offset_x;
+            iy=qbr_float_to_long(write_page->y) + write_page->view_offset_y;
         }
-        }else{
-        ix=qbr_float_to_long(write_page->x); iy=qbr_float_to_long(write_page->y);
+    }else{
+        ix=qbr_float_to_long(write_page->x);
+        iy=qbr_float_to_long(write_page->y);
     }
     
     //return if offscreen
-    if ((ix<write_page->view_x1)||(iy<write_page->view_y1)||(ix>write_page->view_x2)||(iy>write_page->view_y2)){
-        return;
-    }
+    if ((ix < write_page->view_x1) || 
+        (iy<write_page->view_y1) ||
+        (ix>write_page->view_x2) || 
+        (iy>write_page->view_y2))
+            return;
+    
     
     //overrides
-    qbg_active_page_offset=write_page->offset;
-    qbg_width=write_page->width;
-    qbg_view_x1=write_page->view_x1;
-    qbg_view_y1=write_page->view_y1;
-    qbg_view_x2=write_page->view_x2;
-    qbg_view_y2=write_page->view_y2;
-    i=write_page->width*write_page->height;
-    if (i>done_size){
-        free(done);
-        done=(uint8*)calloc(i,1);
-    }
+    qbg_active_page_offset = write_page->offset;
+    qbg_width = write_page->width;
+    qbg_view_x1 = write_page->view_x1;
+    qbg_view_y1 = write_page->view_y1;
+    qbg_view_x2 = write_page->view_x2;
+    qbg_view_y2 = write_page->view_y2;
     
-    //return if first point is the bordercolor
-    if (qbg_active_page_offset[iy*qbg_width+ix]==bordercol) return;
+    i = write_page->width * write_page->height;
+    
+    if (i > done_size){
+        free(done);
+        done = (uint8*) calloc(i, 1);
+    }
+
+    //  FirstColor IS THE COLOR OF THE FIRST PIXEL CHECKED. IF bordercol WAS NOT PROVIDED,
+    //  WHICH WOULD HAVE THE VALUE OF "NULL", THEN WE NEED TO CHECK AGAINST THE FIRST COLOR
+    //  OBTAINED.
+    uint32 FirstColor{qbg_active_page_offset[iy * qbg_width + ix] & write_page->mask};
+
+    //  A NEW VARIABLE IS INTRODUCED HERE TO HELP REDUCE THE AMOUNT OF CODE LATER ON.
+    bool SetColor{false};
+
+    //  IF THE bordercol IS NULL, THEN THE CHECK FOR A MATCH WOULD ALWAYS RETURN FALSE.
+    if (bordercol != NULL)
+        //return if first point is the bordercolor.
+        if (qbg_active_page_offset[iy * qbg_width + ix] == bordercol) return;
     
     //create first node
-    a_x[0]=ix; a_y[0]=iy;
-    a_t[0]=15;
+    a_x[0] = ix;
+    a_y[0] = iy;
+    a_t[0] = 15;
     //types:
     //&1=check left
     //&2=check right
     //&4=check above
     //&8=check below
     
-    a_n=1;
-    qbg_active_page_offset[iy*qbg_width+ix]=tile[ix%sx][iy%sy];
-    done[iy*qbg_width+ix]=1;
+    a_n = 1;
+    qbg_active_page_offset[iy * qbg_width + ix] = tile[ix % sx][iy % sy];
+    done[iy * qbg_width + ix] = 1;
     
-    nextpass:
-    b_n=0;
-    for (i=0;i<a_n;i++){
-        t=a_t[i]; ix=a_x[i]; iy=a_y[i];
-        
-        //left
-        if (t&1){
-            x2=ix-1; y2=iy;
-            if (x2>=qbg_view_x1){
-                offset=y2*qbg_width+x2;
-                if (!done[offset]){
-                    done[offset]=1;
-                    if (qbg_active_page_offset[offset]!=bordercol){
-                        qbg_active_page_offset[offset]=tile[x2%sx][y2%sy];
-                        b_t[b_n]=13; b_x[b_n]=x2; b_y[b_n]=y2; b_n++;//add new node
-                    }}}}
-                    
-                    //right
-                    if (t&2){
-                        x2=ix+1; y2=iy;
-                        if (x2<=qbg_view_x2){
-                            offset=y2*qbg_width+x2;
-                            if (!done[offset]){
-                                done[offset]=1;
-                                if (qbg_active_page_offset[offset]!=bordercol){
-                                    qbg_active_page_offset[offset]=tile[x2%sx][y2%sy];
-                                    b_t[b_n]=14; b_x[b_n]=x2; b_y[b_n]=y2; b_n++;//add new node
-                                }}}}
-                                
-                                //above
-                                if (t&4){
-                                    x2=ix; y2=iy-1;
-                                    if (y2>=qbg_view_y1){
-                                        offset=y2*qbg_width+x2;
-                                        if (!done[offset]){
-                                            done[offset]=1;
-                                            if (qbg_active_page_offset[offset]!=bordercol){
-                                                qbg_active_page_offset[offset]=tile[x2%sx][y2%sy];
-                                                b_t[b_n]=7; b_x[b_n]=x2; b_y[b_n]=y2; b_n++;//add new node
-                                            }}}}
-                                            
-                                            //below
-                                            if (t&8){
-                                                x2=ix; y2=iy+1;
-                                                if (y2<=qbg_view_y2){
-                                                    offset=y2*qbg_width+x2;
-                                                    if (!done[offset]){
-                                                        done[offset]=1;
-                                                        if (qbg_active_page_offset[offset]!=bordercol){
-                                                            qbg_active_page_offset[offset]=tile[x2%sx][y2%sy];
-                                                            b_t[b_n]=11; b_x[b_n]=x2; b_y[b_n]=y2; b_n++;//add new node
-                                                        }}}}
-                                                        
-    }//i
-    
-    //no new nodes?
-    if (b_n==0){
-        memset(done,0,write_page->width*write_page->height);//cleanup
-        return;//finished!
+    //  LABELS SHOULD BE AVOIDED IN C++
+    //nextpass:
+
+    //  WE CAN USE A WHILE LOOP TO CREATE AN INFINITE LOOP THAT CAN BE BROKEN OUT OF
+    //  AS NEEDED.
+    while (true) {
+
+        b_n = 0;
+        for (i = 0; i < a_n; i++) {
+
+            //  CLEAR THE SetColor FLAG TO FALSE.
+            SetColor = false;
+            t = a_t[i];
+            ix = a_x[i];
+            iy = a_y[i];
+            
+            // left
+            if (t & 1) {
+                x2 = ix - 1;
+                y2 = iy;
+                if (x2 >= qbg_view_x1) {
+                    offset = y2 * qbg_width + x2;
+                    if (!done[offset]) {
+                        done[offset] = 1;
+                        if (bordercol != NULL) {
+                            //  IF THE bordercol IS NOT NULL, WE CAN CHECK IF THE CURRENT PIXEL
+                            //  MATCHES THE bordercol VALUE. WE SET THE VALUE TO TRUE SO WE CAN
+                            //  WE CAN RENDER THE PIXEL.
+                            if (qbg_active_page_offset[offset] != bordercol) SetColor = true;
+                        } else {
+                            //  IF THE bordercol IS NULL, WE CAN CHECK IF THE CURRENT PIXEL
+                            //  IS THE SAME COLOR AS THE FirstColor VALUE. SET THE "SetColor"
+                            //  FLAG TO TRUE TO RENDER THE PIXEL.
+                            if (qbg_active_page_offset[offset] == FirstColor) SetColor = true;
+                        }
+
+                        //  BY USING THE SetColor VARIABLE, WE CAN PREVENT REPEATING OF CODE.
+                        if (SetColor == true) {
+                            b_t[b_n] = 13;
+                            qbg_active_page_offset[offset] = tile[x2 % sx][y2 % sy];
+                            b_x[b_n] = x2;
+                            b_y[b_n] = y2;
+                            b_n++; // add new node
+                        }
+                    }
+                }
+            }
+
+            SetColor = false;
+
+            // right
+            if (t & 2) {
+                x2 = ix + 1;
+                y2 = iy;
+                if (x2 <= qbg_view_x2) {
+                    offset = y2 * qbg_width + x2;
+                    if (!done[offset]) {
+                        done[offset] = 1;
+                        if (bordercol != NULL) {
+                            //  IF THE bordercol IS NOT NULL, WE CAN CHECK IF THE CURRENT PIXEL
+                            //  MATCHES THE bordercol VALUE. WE SET THE VALUE TO TRUE SO WE CAN
+                            //  WE CAN RENDER THE PIXEL.
+                            if (qbg_active_page_offset[offset] != bordercol) SetColor = true;
+                        } else {
+                            //  IF THE bordercol IS NULL, WE CAN CHECK IF THE CURRENT PIXEL
+                            //  IS THE SAME COLOR AS THE FirstColor VALUE. SET THE "SetColor"
+                            //  FLAG TO TRUE TO RENDER THE PIXEL.
+                            if (qbg_active_page_offset[offset] == FirstColor) SetColor = true;
+                        }
+
+                        //  BY USING THE SetColor VARIABLE, WE CAN PREVENT REPEATING OF CODE.
+                        if (SetColor == true) {
+                            qbg_active_page_offset[offset] = tile[x2 % sx][y2 % sy];
+                            b_t[b_n] = 14;
+                            b_x[b_n] = x2;
+                            b_y[b_n] = y2;
+                            b_n++; // add new node
+                        }
+                    }
+                }
+            }
+
+            SetColor = false;
+
+            // above
+            if (t & 4) {
+                x2 = ix;
+                y2 = iy - 1;
+                if (y2 >= qbg_view_y1) {
+                    offset = y2 * qbg_width + x2;
+                    if (!done[offset]) {
+                        done[offset] = 1;
+                        if (bordercol != NULL) {
+                            //  IF THE bordercol IS NOT NULL, WE CAN CHECK IF THE CURRENT PIXEL
+                            //  MATCHES THE bordercol VALUE. WE SET THE VALUE TO TRUE SO WE CAN
+                            //  WE CAN RENDER THE PIXEL.
+                            if (qbg_active_page_offset[offset] != bordercol) SetColor = true;
+                        } else {
+                            //  IF THE bordercol IS NULL, WE CAN CHECK IF THE CURRENT PIXEL
+                            //  IS THE SAME COLOR AS THE FirstColor VALUE. SET THE "SetColor"
+                            //  FLAG TO TRUE TO RENDER THE PIXEL.
+                            if (qbg_active_page_offset[offset] == FirstColor) SetColor = true;
+                        }
+
+                        //  BY USING THE SetColor VARIABLE, WE CAN PREVENT REPEATING OF CODE.
+                        if (SetColor == true) {
+                            qbg_active_page_offset[offset] = tile[x2 % sx][y2 % sy];
+                            b_t[b_n] = 7;
+                            b_x[b_n] = x2;
+                            b_y[b_n] = y2;
+                            b_n++; // add new node
+                        }
+                    }
+                }
+            }
+
+            SetColor = false;
+
+            // below
+            if (t & 8) {
+                x2 = ix;
+                y2 = iy + 1;
+                if (y2 <= qbg_view_y2) {
+                    offset = y2 * qbg_width + x2;
+                    if (!done[offset]) {
+                        done[offset] = 1;
+                        if (bordercol != NULL) {
+                            //  IF THE bordercol IS NOT NULL, WE CAN CHECK IF THE CURRENT PIXEL
+                            //  MATCHES THE bordercol VALUE. WE SET THE VALUE TO TRUE SO WE CAN
+                            //  WE CAN RENDER THE PIXEL.
+                            if (qbg_active_page_offset[offset] != bordercol) SetColor = true;
+                        } else {
+                            //  IF THE bordercol IS NULL, WE CAN CHECK IF THE CURRENT PIXEL
+                            //  IS THE SAME COLOR AS THE FirstColor VALUE. SET THE "SetColor"
+                            //  FLAG TO TRUE TO RENDER THE PIXEL.
+                            if (qbg_active_page_offset[offset] == FirstColor) SetColor = true;
+                        }
+
+                        //  BY USING THE SetColor VARIABLE, WE CAN PREVENT REPEATING OF CODE.
+                        if (SetColor == true) {
+                            qbg_active_page_offset[offset] = tile[x2 % sx][y2 % sy];
+                            b_t[b_n] = 11;
+                            b_x[b_n] = x2;
+                            b_y[b_n] = y2;
+                            b_n++; // add new node
+                        }
+                    }
+                }
+            }
+
+        } // i
+
+        // no new nodes?
+        if (b_n == 0) {
+            memset(done, 0, write_page->width * write_page->height); // cleanup
+            return;                                                  // finished!
+        }
+
+        // swap a & b arrays
+        sp = a_x;
+        a_x = b_x;
+        b_x = sp;
+        sp = a_y;
+        a_y = b_y;
+        b_y = sp;
+        cp = a_t;
+        a_t = b_t;
+        b_t = cp;
+        a_n = b_n;
+
+        //  THE GOTO STATEMENT SHOULD NEVER BE USED IN C++.
+        //goto nextpass;
     }
-    
-    //swap a & b arrays
-    sp=a_x; a_x=b_x; b_x=sp;
-    sp=a_y; a_y=b_y; b_y=sp;
-    cp=a_t; a_t=b_t; b_t=cp;
-    a_n=b_n;
-    
-    goto nextpass;
-    
 }
 
 
