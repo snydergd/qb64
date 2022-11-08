@@ -25752,15 +25752,6 @@ SUB Give_Error (a$)
     Error_Message = a$
 END SUB
 
-SUB WriteConfigSetting (section$, item$, value$)
-    WriteSetting ConfigFile$, section$, item$, value$
-END SUB
-
-FUNCTION ReadConfigSetting (section$, item$, value$)
-    value$ = ReadSetting$(ConfigFile$, section$, item$)
-    ReadConfigSetting = (LEN(value$) > 0)
-END FUNCTION
-
 FUNCTION VRGBS~& (text$, DefaultColor AS _UNSIGNED LONG)
     'Value of RGB String = VRGBS without a ton of typing
     'A function to get the RGB value back from a string such as _RGB32(255,255,255)
@@ -26309,7 +26300,13 @@ SUB increaseUDTArrays
     REDIM _PRESERVE udtenext(x + 1000) AS LONG
 END SUB
 
+' Generic method (can be used outside of QB64) includes:
+
 '$INCLUDE:'utilities\strings.bas'
+
+' Custom method (designed specifically for QB64) includes:
+
+'$INCLUDE:'utilities\config.bas'
 '$INCLUDE:'utilities\file.bas'
 '$INCLUDE:'subs_functions\extensions\opengl\opengl_methods.bas'
 '$INCLUDE:'utilities\ini-manager\ini.bm'
