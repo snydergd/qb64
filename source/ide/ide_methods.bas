@@ -1168,13 +1168,11 @@ FUNCTION ide2 (ignore)
         END IF 'skipdisplay
 
         IF WhiteListQB64FirstTimeMsg = 0 THEN
-            IF INSTR(_OS$, "WIN") THEN whiteListProcess$ = "and the process 'qb64.exe' " ELSE whiteListProcess$ = ""
-            result = idemessagebox("Welcome to QB64", "QB64 is an independently distributed program, and as such" + CHR$(10) + _
-                                                      "both 'qb64" + extension$ + "' and the programs you create with it may" + CHR$(10) + _
-                                                      "eventually be flagged as false positives by your" + CHR$(10) + _
-                                                      "antivirus/antimalware software." + CHR$(10) + CHR$(10) + _
-                                                      "It is advisable to whitelist your whole QB64 folder" + CHR$(10) + _
-                                                      whiteListProcess$ + "to avoid operation errors.", "#OK;#Don't show this again")
+            'IF INSTR(_OS$, "WIN") THEN whiteListProcess$ = "and the process 'qb64.exe' " ELSE whiteListProcess$ = ""
+            result = idemessagebox("", "Welcome to QB64.com's QB64" + CHR$(10) + _
+                                       CHR$(10) + _
+                                       "Copyright (C) The QB64.com Community, 2007-2022." + CHR$(10) + _
+                                       "All rights reserved.", "#OK;#Don't show this again")
 
             PCOPY 3, 0: SCREEN , , 3, 0
             IF result = 2 THEN
@@ -3451,9 +3449,9 @@ FUNCTION ide2 (ignore)
                         END IF
                         IF ideunsaved = 1 AND ideprogname <> "" THEN
                             PCOPY 3, 0
-                            r$ = idesavenow
+                            r$ = IdeSaveNow$
                             PCOPY 3, 0: SCREEN , , 3, 0
-                            IF r$ = "C" THEN CLOSE #150: GOTO skipundo
+                            IF r$ = "C" OR r$ = "H" THEN CLOSE #150: GOTO skipundo
                             IF r$ = "Y" THEN
                                 idesave idepath$ + idepathsep$ + ideprogname$
                             END IF
@@ -5207,13 +5205,17 @@ FUNCTION ide2 (ignore)
             IF menu$(m, s) = "#About..." THEN
                 helpabout:
                 PCOPY 2, 0
-                m$ = "QB64 Version " + Version$ '+ CHR$(10) + DevChannel$
-                IF LEN(AutoBuildMsg$) THEN 
-                    m$ = m$ + CHR$(10) + AutoBuildMsg$
-                ELSE
-                    m$ = m$ + CHR$(10) + DevChannel$
-                 END IF
-                result = idemessagebox("About", m$, "")
+                'm$ = "QB64 Version " + Version$ '+ CHR$(10) + DevChannel$
+                m$ = "QB64.com's QB64" + CHR$(10) + _
+                     "Version " + Version$ + CHR$(10) + _
+                     "Copyright (C) The QB64.com Community, 2007-2022."
+                'IF LEN(AutoBuildMsg$) THEN 
+                '    m$ = m$ + CHR$(10) + AutoBuildMsg$
+                'ELSE
+                '    m$ = m$ + CHR$(10) + DevChannel$
+                'END IF
+                'result = idemessagebox("About", m$, "")
+                result = idemessagebox("", m$, "")
                 PCOPY 3, 0: SCREEN , , 3, 0
                 GOTO ideloop
             END IF
@@ -6090,9 +6092,9 @@ FUNCTION ide2 (ignore)
                 PCOPY 2, 0
                 quickexit:
                 IF ideunsaved = 1 THEN
-                    r$ = idesavenow
+                    r$ = IdeSaveNow$
                     PCOPY 3, 0: SCREEN , , 3, 0
-                    IF r$ = "C" THEN GOTO ideloop
+                    IF r$ = "C" OR r$ = "H" THEN GOTO ideloop
                     IF r$ = "Y" THEN
                         IF ideprogname = "" THEN
                             ProposedTitle$ = FindProposedTitle$
@@ -6118,9 +6120,9 @@ FUNCTION ide2 (ignore)
                 PCOPY 2, 0
                 ctrlNew:
                 IF ideunsaved = 1 THEN
-                    r$ = idesavenow
+                    r$ = IdeSaveNow$
                     PCOPY 3, 0: SCREEN , , 3, 0
-                    IF r$ = "C" THEN GOTO ideloop
+                    IF r$ = "C" OR r$ = "H" THEN GOTO ideloop
                     IF r$ = "Y" THEN
                         IF ideprogname = "" THEN
                             ProposedTitle$ = FindProposedTitle$
@@ -6225,9 +6227,9 @@ FUNCTION ide2 (ignore)
                 PCOPY 2, 0
                 ctrlOpen:
                 IF ideunsaved THEN
-                    r$ = idesavenow
+                    r$ = IdeSaveNow$
                     PCOPY 3, 0: SCREEN , , 3, 0
-                    IF r$ = "C" THEN GOTO ideloop
+                    IF r$ = "C" OR r$ = "H" THEN GOTO ideloop
                     IF r$ = "Y" THEN
                         IF ideprogname = "" THEN
                             ProposedTitle$ = FindProposedTitle$
@@ -12351,13 +12353,12 @@ SUB idesave (f$)
     ideunsaved = 0
 END SUB
 
-FUNCTION idesavenow$
-    m$ = "Program is not saved. Save it now?"
-    result = idemessagebox("", m$, "#Yes;#No;#Cancel")
-    SELECT CASE result
-        CASE 1: idesavenow$ = "Y"
-        CASE 2: idesavenow$ = "N"
-        CASE 0, 3: idesavenow$ = "C"
+FUNCTION IdeSaveNow$
+    SELECT CASE IdeMessageBox("", "Loaded file is not saved. Save it now?", "#Yes;#No;#Cancel") ' "#Yes;#No;#Cancel;#Help"
+        CASE 1: IdeSaveNow$ = "Y"
+        CASE 2: IdeSaveNow$ = "N"
+        'CASE 4: IdeSaveNow$ = "H"
+        CASE ELSE: IdeSaveNow$ = "C"
     END SELECT
 END FUNCTION
 
@@ -15291,7 +15292,7 @@ FUNCTION ideadvancedbox
     ideadvancedbox = 0
 END FUNCTION
 
-FUNCTION idemessagebox (titlestr$, messagestr$, buttons$)
+FUNCTION IdeMessageBox (titleStr$, messageStr$, buttons$)
 
     '-------- generic dialog box header --------
     PCOPY 0, 2
@@ -15338,11 +15339,11 @@ FUNCTION idemessagebox (titlestr$, messagestr$, buttons$)
     IF w < w2 THEN w = w2
     IF w < buttonsLen THEN w = buttonsLen
     IF w > idewx - 4 THEN w = idewx - 4
-    idepar p, w, 3 + MessageLines, titlestr$
+    idepar p, w, 4 + MessageLines, titlestr$
 
     i = i + 1
     o(i).typ = 3
-    o(i).y = 3 + MessageLines
+    o(i).y = 4 + MessageLines
     o(i).txt = idenewtxt(StrReplace$(buttons$, ";", sep))
     o(i).dft = 1
     '-------- end of init --------
@@ -15353,9 +15354,9 @@ FUNCTION idemessagebox (titlestr$, messagestr$, buttons$)
 
     DO 'main loop
 
-
         '-------- generic display dialog box & objects --------
         idedrawpar p
+        COLOR 0, 7: _PRINTSTRING (p.x, p.y + p.h - 1), CHR$(195) + STRING$(p.w, 196) + CHR$(180)
         f = 1: cx = 0: cy = 0
         FOR i = 1 TO 100
             IF o(i).typ THEN
