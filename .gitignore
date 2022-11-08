@@ -17,3 +17,4 @@ internal/c/qbx[2-9].cpp
 /qb64
 .fake
 .vscode
+build.cmd
