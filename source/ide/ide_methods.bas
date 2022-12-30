@@ -1503,12 +1503,12 @@ FUNCTION ide2 (ignore)
         IF os$ = "WIN" OR MacOSX = 1 THEN
             IF _WINDOWHASFOCUS THEN
                 LOCATE , , 1
-                _PALETTECOLOR 5, IDEBracketHighlightColor, 0
-                _PALETTECOLOR 6, IDEBackgroundColor2, 0
+                '_PALETTECOLOR 5, IDEBracketHighlightColor, 0
+                '_PALETTECOLOR 6, IDEBackgroundColor2, 0
             ELSE
                 LOCATE , , 0
-                _PALETTECOLOR 5, IDEBackgroundColor, 0
-                _PALETTECOLOR 6, IDEBackgroundColor, 0
+                '_PALETTECOLOR 5, IDEBackgroundColor, 0
+                '_PALETTECOLOR 6, IDEBackgroundColor, 0
             END IF
         END IF
 
