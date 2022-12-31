@@ -1169,9 +1169,24 @@ FUNCTION ide2 (ignore)
 
         IF WhiteListQB64FirstTimeMsg = 0 THEN
             'IF INSTR(_OS$, "WIN") THEN whiteListProcess$ = "and the process 'qb64.exe' " ELSE whiteListProcess$ = ""
-            result = idemessagebox("", "Welcome to QB64.com's QB64" + CHR$(10) + _
+
+            RANDOMIZE TIMER
+            SELECT CASE FIX(RND * 20 + 1) 
+                CASE 1, 3, 5, 7, 9: by$ = "The Kid In Us All"
+                CASE 2: by$ = "Inconceivable!"
+                CASE 4: by$ = "Shall We Play A Game?"
+                CASE 6: by$ = "Late Night Coders"
+                CASE 8: by$ = "NOT Microsoft Corporation"
+                CASE 10: by$ = "Cliffs of Insanity"
+                CASE 12: by$ = "All Out Of Bubblegum"
+                CASE 14: by$ = "We Don't Need Roads"
+                CASE 16: by$ = "Wax On, Wax Off"
+                CASE 18: by$ = "Yippee Ki-yay"
+                CASE ELSE: by$ = "Dartmouth Didn't" ' 11, 13, 15, 17, 19
+            END SELECT                   
+            result = idemessagebox("", "Welcome to The QB64 'Retro' IDE" + CHR$(10) + _
                                        CHR$(10) + _
-                                       "Copyright (C) The QB64.com Community, 2007-2022." + CHR$(10) + _
+                                       "Copyright (C) " + by$ + ", 1964-2023." + CHR$(10) + _
                                        "All rights reserved.", "#OK;#Don't show this again")
 
             PCOPY 3, 0: SCREEN , , 3, 0
@@ -1503,12 +1518,12 @@ FUNCTION ide2 (ignore)
         IF os$ = "WIN" OR MacOSX = 1 THEN
             IF _WINDOWHASFOCUS THEN
                 LOCATE , , 1
-                _PALETTECOLOR 5, IDEBracketHighlightColor, 0
-                _PALETTECOLOR 6, IDEBackgroundColor2, 0
+                '_PALETTECOLOR 5, IDEBracketHighlightColor, 0
+                '_PALETTECOLOR 6, IDEBackgroundColor2, 0
             ELSE
                 LOCATE , , 0
-                _PALETTECOLOR 5, IDEBackgroundColor, 0
-                _PALETTECOLOR 6, IDEBackgroundColor, 0
+                '_PALETTECOLOR 5, IDEBackgroundColor, 0
+                '_PALETTECOLOR 6, IDEBackgroundColor, 0
             END IF
         END IF
 
@@ -5206,9 +5221,23 @@ FUNCTION ide2 (ignore)
                 helpabout:
                 PCOPY 2, 0
                 'm$ = "QB64 Version " + Version$ '+ CHR$(10) + DevChannel$
-                m$ = "QB64.com's QB64" + CHR$(10) + _
+                RANDOMIZE TIMER
+                SELECT CASE FIX(RND * 20 + 1) 
+                   CASE 1, 3, 5, 7, 9: by$ = "The Kid In Us All"
+                   CASE 2: by$ = "Inconceivable!"
+                   CASE 4: by$ = "Shall We Play A Game?"
+                   CASE 6: by$ = "Late Night Coders"
+                   CASE 8: by$ = "NOT Microsoft Corporation"
+                   CASE 10: by$ = "Cliffs of Insanity"
+                   CASE 12: by$ = "All Out Of Bubblegum"
+                   CASE 14: by$ = "We Don't Need Roads"
+                   CASE 16: by$ = "Wax On, Wax Off"
+                   CASE 18: by$ = "Yippee Ki-yay"
+                   CASE ELSE: by$ = "Dartmouth Didn't" ' 11, 13, 15, 17, 19
+                END SELECT                   
+                m$ = "The QB64 'Retro' IDE" + CHR$(10) + _
                      "Version " + Version$ + CHR$(10) + _
-                     "Copyright (C) The QB64.com Community, 2007-2022."
+                     "Copyright (C) " + by$ + ", 1964-2023."
                 'IF LEN(AutoBuildMsg$) THEN 
                 '    m$ = m$ + CHR$(10) + AutoBuildMsg$
                 'ELSE
