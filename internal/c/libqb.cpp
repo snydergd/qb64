@@ -145,6 +145,7 @@ void setbits(uint32 bsize,uint8 *base,ptrszint i,int64 val){
 #ifdef QB64_UNIX
     #include <pthread.h>
     #include <libgen.h> //required for dirname()
+    #include <sys/ioctl.h> //required for terminal width and height
 #endif
 
 #ifdef QB64_LINUX
@@ -19084,6 +19085,13 @@ void sub_put2(int32 i,int64 offset,void *element,int32 passed){
                     return cl_bufinfo.srWindow.Right - cl_bufinfo.srWindow.Left + 1;
                 }
             #endif
+            #ifdef QB64_UNIX
+                if ((read_page->console && !passed)||i==console_image){
+                    struct winsize w;
+                    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+                    return w.ws_col;
+                }
+            #endif
 
             if (passed){
                 if (i>=0){//validate i
@@ -19112,6 +19120,13 @@ void sub_put2(int32 i,int64 offset,void *element,int32 passed){
                     GetConsoleScreenBufferInfo(cl_conout, &cl_bufinfo);
                     return cl_bufinfo.srWindow.Bottom - cl_bufinfo.srWindow.Top + 1;
                     return cl_bufinfo.dwMaximumWindowSize.Y;
+                }
+            #endif
+            #ifdef QB64_UNIX
+                if ((read_page->console && !passed)||i==console_image){
+                    struct winsize w;
+                    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+                    return w.ws_row;
                 }
             #endif
 
