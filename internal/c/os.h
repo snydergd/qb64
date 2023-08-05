@@ -26,12 +26,12 @@
     #define QB64_MACOSX
     #define QB64_UNIX
     #define QB64_GCC
-    #elif defined(__linux__)
+    //#elif defined(__linux__)
+    #else
     #define QB64_LINUX
     #define QB64_UNIX
     #define QB64_GCC
-    #else
-    #error "Unknown system; refusing to build. Edit os.h if needed"
+//    #error "Unknown system; refusing to build. Edit os.h if needed"
 #endif
 
 #if defined(_WIN64) || defined(__x86_64__) || defined(__ppc64__) || defined(QB64_MACOSX) || defined(__aarch64__)

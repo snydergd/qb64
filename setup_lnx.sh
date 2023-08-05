@@ -2,6 +2,8 @@
 #QB64 Installer -- Shell Script -- Matt Kilgore 2013
 #Version 5 -- January 2020
 
+export PATH="/home/george/emcc:$PATH";
+
 #This checks the currently installed packages for the one's QB64 needs
 #And runs the package manager to install them if that is the case
 pkg_install() {
@@ -136,7 +138,8 @@ popd >/dev/null
 echo "Building 'QB64'"
 cp -r ./internal/source/* ./internal/temp/
 pushd internal/c >/dev/null
-g++ -no-pie -w qbx.cpp libqb/os/lnx/libqb_setup.o parts/video/font/ttf/os/lnx/src.o parts/core/os/lnx/src.a -lGL -lGLU -lX11 -lpthread -ldl -lrt -D FREEGLUT_STATIC -o ../../qb64
+#g++ -no-pie -w qbx.cpp libqb/os/lnx/libqb_setup.o parts/video/font/ttf/os/lnx/src.o parts/core/os/lnx/src.a -lGL -lGLU -lX11 -lpthread -ldl -lrt -D FREEGLUT_STATIC -o ../../qb64
+g++ -no-pie -w qbx.cpp libqb/os/lnx/libqb_setup.o parts/video/font/ttf/os/lnx/src.o -lGL -lGLU -lX11 -lpthread -ldl -lrt -D FREEGLUT_STATIC -v -o ../../qb64
 popd
 
 if [ -e "./qb64" ]; then
